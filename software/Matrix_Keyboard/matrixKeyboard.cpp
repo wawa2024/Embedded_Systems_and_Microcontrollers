@@ -18,7 +18,6 @@
 ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////
 
-
 static const uint8_t historyLength = 3;
 
 static uint8_t keymap[] = { '1', '2', '3', 'A',
@@ -30,6 +29,14 @@ static uint8_t keymap[] = { '1', '2', '3', 'A',
 static const uint8_t numberOfKeys = 16;
 
 static uint8_t keyHistory[historyLength];
+
+static uint8_t pressedKey = ' ';
+
+
+uint8_t getPressedKey()
+{
+    return pressedKey;
+}
 
 
 int8_t readLines(void)
@@ -130,7 +137,7 @@ uint8_t uniformHistory(void)
     return true;
 }
 
-uint8_t getKey(void)
+void readKey(void)
 {   
     keyHistory[2] = keyHistory[1];
     keyHistory[1] = keyHistory[0];
@@ -140,12 +147,12 @@ uint8_t getKey(void)
     if( uniformHistory() )
     {
         // pressed key
-        return keyHistory[0];
+        pressedKey = keyHistory[0];
     }
     else
     {
         // "no input"
-        return ' ';
+        pressedKey = ' ';
     }
 
 }
