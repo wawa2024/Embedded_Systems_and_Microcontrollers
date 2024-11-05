@@ -7,7 +7,7 @@
 //
 //              INPUTS
 //              COL1    COL2    COL3    COL4
-//              PB0     PB1     PB2     PB3
+//              PD4     PD5     PD6     PD7
 //   OUTPUTS    ----------------------------
 //   ROW1 PC0  | 1       2       3       A
 //   ROW2 PC1  | 4       5       6       B
@@ -45,8 +45,8 @@ int8_t readLines(void)
     
     // PORT B init (COLS)
     // Input
-    DDRB &= 0xF0;
-    PORTB &= 0xF0;
+    DDRD &= 0x0F;
+    PORTD &= 0x0F;
 
     // PORT C init (ROWS)
     // Output
@@ -57,7 +57,7 @@ int8_t readLines(void)
     PORTC |= 0x01; 
     _delay_us(1);
     // Read the columns
-    temp = (PINB & 0x0F);
+    temp = ((PIND & 0xF0) >> 4);
     
     for(uint8_t row = 1; row < 4; row++)
     {
@@ -67,14 +67,14 @@ int8_t readLines(void)
         PORTC |= (1 << row);
         _delay_us(1); 
         // Read the columns 
-        temp |= (PINB & 0x0F) << (row*4);
+        temp |= ((PIND & 0xF0) >> 4) << (row*4);
     }
   
     // Set all row pins LOW
     PORTC &= 0xF0;
 
     uint8_t count = 0;
-    for(uint8_t mask = 0x01; mask != 0; mask<<=1)
+    for(uint16_t mask = 0x0001; mask != 0; mask<<=1)
     {
         if(temp & mask)
         {
@@ -85,7 +85,7 @@ int8_t readLines(void)
             if(count > 1)
             {
                 // Clear the pressed button bits
-                temp = 0x00;
+                temp = 0x0000;
                 break;
             }
         }
@@ -108,7 +108,7 @@ int8_t readLines(void)
         // No button has been pressed.
         // Value 0 is used to index an array
         // so a -1 is returned to indicate null value
-        temp = -1;
+        return -1;
     }
 
     return temp;
@@ -122,10 +122,10 @@ uint8_t getCharacter(void)
     // -1 indicated no button is pressed
     if(temp == -1){ return ' '; }
     // map the given input to a character
-    else{ return keymap[temp]; }
+    else{ return keymap[(uint8_t)temp]; }
 }
 
-uint8_t uniformHistory(void)
+bool uniformHistory(void)
 {
     for(uint8_t i = 0; i < historyLength; i++)
     {
@@ -137,7 +137,7 @@ uint8_t uniformHistory(void)
     return true;
 }
 
-void readKey(void)
+void readKeypad(void)
 {   
     keyHistory[2] = keyHistory[1];
     keyHistory[1] = keyHistory[0];
@@ -156,9 +156,3 @@ void readKey(void)
     }
 
 }
-
-
-
-
-
-
