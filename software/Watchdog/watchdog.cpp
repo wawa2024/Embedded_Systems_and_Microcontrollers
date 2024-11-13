@@ -1,12 +1,13 @@
 
 #include "watchdog.h"
+#include <Arduino.h>
 
-void wdt_ack()
+void wdt_ack(void)
 {
     __asm__ ("WDR");
 }
 
-void wdt_init()
+void wdt_init(void)
 {
     __asm__ ("cli");
     wdt_ack();
