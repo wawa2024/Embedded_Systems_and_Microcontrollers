@@ -1,0 +1,19 @@
+
+#include "watchdog.h"
+
+void wdt_ack()
+{
+    __asm__ ("WDR");
+}
+
+void wdt_init()
+{
+    __asm__ ("cli");
+    wdt_ack();
+    // WDE = 1, WDCE = 1
+    WDTCSR |= 0x18;
+    // 500ms timeout
+    // WDE = 1, WDP2 = 1, WDP0 = 1
+    WDTCSR = 0x0D;
+    __asm__ ("sei");
+}
