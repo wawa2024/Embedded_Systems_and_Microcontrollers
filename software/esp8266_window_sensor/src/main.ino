@@ -153,7 +153,7 @@ void loop() {
       alarmMillis = millis();
     }
 
-    if (std::abs(g.gyro.x - averageGyro.x) > 30) {
+    if (std::abs(g.gyro.x - averageGyro.x) > 0.5) {
       alarm = true;
       previousStableAccel = averageAccel;
       previousStableGyro = averageGyro;
@@ -161,7 +161,7 @@ void loop() {
       alarmMillis = millis();
     }
 
-    if (std::abs(g.gyro.y - averageGyro.y) > 30) {
+    if (std::abs(g.gyro.y - averageGyro.y) > 0.5) {
       alarm = true;
       previousStableAccel = averageAccel;
       previousStableGyro = averageGyro;
@@ -169,7 +169,7 @@ void loop() {
       alarmMillis = millis();
     }
 
-    if (std::abs(g.gyro.z - averageGyro.z) > 30) {
+    if (std::abs(g.gyro.z - averageGyro.z) > 0.5) {
       alarm = true;
       previousStableAccel = averageAccel;
       previousStableGyro = averageGyro;
