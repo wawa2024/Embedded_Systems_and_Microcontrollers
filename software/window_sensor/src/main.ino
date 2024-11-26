@@ -11,6 +11,19 @@ const char* ssid = "main_hub";
 const char* password = "12345678";
 uint32_t lastMillis = 0;
 
+struct AccelData {
+  float x, y, z;
+};
+
+struct GyroData {
+  float x, y, z;
+};
+
+const int max_history = 10;
+AccelData accelHistory[max_history];
+GyroData gyroHistory[max_history];
+int currentIndex = 0;
+
 void setup() {
   Serial.begin(115200);
   Wire.begin(D1, D2);
@@ -28,6 +41,11 @@ void setup() {
   imu.setGyroRange(MPU6050_RANGE_250_DEG);
   
   imu.setFilterBandwidth(MPU6050_BAND_21_HZ);
+
+  for (int i = 0; i < max_history; i++) {
+    accelHistory[i] = {0, 0, 0};
+    gyroHistory[i] = {0, 0, 0};
+  }
   
 /*  while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -41,6 +59,30 @@ void setup() {
 void loop() {
   sensors_event_t a, g, temp;
   imu.getEvent(&a, &g, &temp);
+
+  accelHistory[currentIndex] = {a.acceleration.x, a.acceleration.y, a.acceleration.z};
+  gyroHistory[currentIndex] = {g.gyro.x, g.gyro.y, g.gyro.z};
+
+  currentIndex++;
+  
+  AccelData averageAccel;
+  GyroData averageGyro;
+
+  for (int i = 0; i < max_history; i++) {
+    averageAccel.x += accelHistory[i].x;
+    averageAccel.y += accelHistory[i].y;
+    averageAccel.z += accelHistory[i].z;
+    averageGyro.x += gyroHistory[i].x;
+    averageGyro.y += gyroHistory[i].y;
+    averageGyro.z += gyroHistory[i].z;
+  }
+
+    averageAccel.x /= max_history;
+    averageAccel.y /= max_history;
+    averageAccel.z /= max_history;
+    averageGyro.x /= max_history;
+    averageGyro.y /= max_history;
+    averageGyro.z /= max_history;
 
   if ((millis() - lastMillis) % 50 == 0) {
     Serial.print("Acceleration X: ");
