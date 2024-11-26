@@ -8,7 +8,7 @@ typedef struct
 {
     uint8_t addr;
     uint8_t data;
-}eeprom_t;
+} eeprom_t ;
 
 
 // Reads a byte from eeprom memory
