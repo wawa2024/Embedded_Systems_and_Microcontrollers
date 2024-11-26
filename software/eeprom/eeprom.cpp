@@ -29,7 +29,6 @@ void eeprom_read(eeprom_t &d)
 // Writes a byte to eeprom memory
 void eeprom_write(eeprom_t &d)
 {
-
     // Can't write while another write is in progress
     while(EECR & (1 << EEPE)){};
     
@@ -50,5 +49,4 @@ void eeprom_write(eeprom_t &d)
 
     // Enable interrupts after the read operation
     __asm__ ("sei");
-
 }
