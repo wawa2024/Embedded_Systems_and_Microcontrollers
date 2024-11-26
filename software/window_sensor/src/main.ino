@@ -4,12 +4,21 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
+#include <cmath>
 
 Adafruit_MPU6050 imu;
 
 const char* ssid = "main_hub";
 const char* password = "12345678";
 uint32_t lastMillis = 0;
+uint32_t alarmMillis = 0;
+uint8_t magnetPin = D3;
+
+bool alarm = false;
+bool initialized = false;
+uint8_t identifier = 0;
+uint8_t magnetValue = 0;
+uint8_t previousMagnetValue = 0;
 
 struct AccelData {
   float x, y, z;
@@ -24,10 +33,14 @@ AccelData accelHistory[max_history];
 GyroData gyroHistory[max_history];
 int currentIndex = 0;
 
+AccelData previousStableAccel = {0, 0, 0};
+GyroData previousStableGyro = {0, 0, 0};
+
 void setup() {
   Serial.begin(115200);
   Wire.begin(D1, D2);
   WiFi.begin(ssid, password);
+  pinMode(magnetPin, INPUT);
 
   if (!imu.begin()) {
     Serial.println("Didn't detect MPU6050");
@@ -63,10 +76,17 @@ void loop() {
   accelHistory[currentIndex] = {a.acceleration.x, a.acceleration.y, a.acceleration.z};
   gyroHistory[currentIndex] = {g.gyro.x, g.gyro.y, g.gyro.z};
 
-  currentIndex++;
+  previousMagnetValue = magnetValue;
+  magnetValue = digitalRead(magnetPin);
   
-  AccelData averageAccel;
-  GyroData averageGyro;
+  currentIndex++;
+  if (currentIndex >= max_history) {
+    currentIndex = 0;
+    initialized = true;
+  }
+  
+  AccelData averageAccel = {0, 0, 0};
+  GyroData averageGyro = {0, 0, 0};
 
   for (int i = 0; i < max_history; i++) {
     averageAccel.x += accelHistory[i].x;
@@ -84,24 +104,95 @@ void loop() {
     averageGyro.y /= max_history;
     averageGyro.z /= max_history;
 
+
   if ((millis() - lastMillis) % 50 == 0) {
     Serial.print("Acceleration X: ");
-    Serial.print(a.acceleration.x);
+    Serial.print(averageAccel.x);
     Serial.print(", Y: ");
-    Serial.print(a.acceleration.y);
+    Serial.print(averageAccel.y);
     Serial.print(", Z: ");
-    Serial.print(a.acceleration.z);
+    Serial.print(averageAccel.z);
     Serial.println(" m/s^2");
 
     Serial.print("Rotation X: ");
-    Serial.print(g.gyro.x);
+    Serial.print(averageGyro.x);
     Serial.print(", Y: ");
-    Serial.print(g.gyro.y);
+    Serial.print(averageGyro.y);
     Serial.print(", Z: ");
-    Serial.print(g.gyro.z);
+    Serial.print(averageGyro.z);
     Serial.println(" rad/s");
 
+    Serial.print("Magnet state: ");
+    Serial.println(magnetValue);
+
     Serial.println("");
+  }
+
+  if (initialized == true) {
+    if (std::abs(a.acceleration.x - averageAccel.x) > 10) {
+      alarm = true;
+      previousStableAccel = averageAccel;
+      previousStableGyro = averageGyro;
+      identifier = 1;
+      alarmMillis = millis();
+    }
+
+    if (std::abs(a.acceleration.y - averageAccel.y) > 10) {
+      alarm = true;
+      previousStableAccel = averageAccel;
+      previousStableGyro = averageGyro;   
+      identifier = 2; 
+      alarmMillis = millis();
+    }
+
+    if (std::abs(a.acceleration.z - averageAccel.z) > 10) {
+      alarm = true;
+      previousStableAccel = averageAccel;
+      previousStableGyro = averageGyro;
+      identifier = 3;
+      alarmMillis = millis();
+    }
+
+    if (std::abs(g.gyro.x - averageGyro.x) > 30) {
+      alarm = true;
+      previousStableAccel = averageAccel;
+      previousStableGyro = averageGyro;
+      identifier = 4;
+      alarmMillis = millis();
+    }
+
+    if (std::abs(g.gyro.y - averageGyro.y) > 30) {
+      alarm = true;
+      previousStableAccel = averageAccel;
+      previousStableGyro = averageGyro;
+      identifier = 5;
+      alarmMillis = millis();
+    }
+
+    if (std::abs(g.gyro.z - averageGyro.z) > 30) {
+      alarm = true;
+      previousStableAccel = averageAccel;
+      previousStableGyro = averageGyro;
+      identifier = 6;
+      alarmMillis = millis();
+    }
+
+    if (magnetValue != previousMagnetValue) {
+      alarm = true;
+      identifier = 7;
+      alarmMillis = millis();
+    }
+
+  }
+
+  if (alarm == true) {
+    Serial.print("Alarm ");
+    Serial.println(identifier);
+    if (millis() - alarmMillis >= 2000) {
+      Serial.print("Alarm timeout ");
+      Serial.println(identifier);
+      alarm = false;
+    }
   }
 
 
