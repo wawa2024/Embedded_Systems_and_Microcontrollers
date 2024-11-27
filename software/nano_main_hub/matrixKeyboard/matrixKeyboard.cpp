@@ -1,5 +1,5 @@
-#include "matrixKeyboard.h"
 #include <Arduino.h>
+#include "matrixKeyboard.h"
 
 
 ///////////////////////////////////////////////////////////
@@ -21,9 +21,9 @@
 static const uint8_t historyLength = 3;
 
 static uint8_t keymap[] = { '1', '2', '3', 'A',
-                          '4', '5', '6', 'B',
-                          '7', '8', '9', 'C',
-                          '*', '0', '#', 'D' };
+                            '4', '5', '6', 'B',
+                            '7', '8', '9', 'C',
+                            '*', '0', '#', 'D' };
 
 
 static const uint8_t numberOfKeys = 16;
@@ -37,7 +37,6 @@ uint8_t getPressedKey()
 {
     return pressedKey;
 }
-
 
 int8_t readLines(void)
 {
@@ -120,9 +119,12 @@ uint8_t getCharacter(void)
     int8_t temp = readLines();
 
     // -1 indicated no button is pressed
-    if(temp == -1){ return ' '; }
+    if(temp == -1)
+      return ' ';
+
     // map the given input to a character
-    else{ return keymap[(uint8_t)temp]; }
+    else
+      return keymap[(uint8_t)temp];
 }
 
 bool uniformHistory(void)
@@ -130,7 +132,8 @@ bool uniformHistory(void)
     for(uint8_t i = 0; i < historyLength; i++)
     {
         // If true then all values aren't equal
-        if( keyHistory[0] != keyHistory[i] ){ return false; }
+        if( keyHistory[0] != keyHistory[i] )
+          return false;
     }
     
     // All values are equal
