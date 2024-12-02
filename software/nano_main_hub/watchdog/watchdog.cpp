@@ -1,6 +1,5 @@
-
-#include "watchdog.h"
 #include <Arduino.h>
+#include "watchdog.h"
 
 void wdt_ack(void)
 {
