@@ -1,26 +1,31 @@
-#include <timer2.h>
+#include "timer2.h"
 #include <stdint.h>
 #include <Arduino.h>
 
-
-static const uint8_t preload = 0xFF - 125; 
+// counter preload for timer2. Theoretical value is 125, 
+// but with experimentation the value 123 was deamed more appropriate
+static const uint8_t preload = 0xFF - 123; 
 
 
 void (*timer2_Callback)(void);
 
 
-ISR(TIMER2_OVF_vect)
+ISR( TIMER2_OVF_vect )
 {
     // If callback is not set then leave
-    if(timer2_Callback == NULL){ break; }
+    if(timer2_Callback == NULL){ return; }
+    
     // Call users callback
     timer2_Callback();
+
+    // Preloaded for 1kHz overflow
+    TCNT2 = preLoad; 
 }   
 
 
 // Timer is initialized to generate 
 // a 1kHz overflow interrupt
-void initTimer2(void)
+void timer2_init(void)
 {
     TCCR2A = 0x00;
 
@@ -36,7 +41,7 @@ void initTimer2(void)
 
 
 // Sets the timer2 interrupt callback
-void setTimer2_Callback( void (*userCallback)(void) )
+void timer2_setCallback( void (*userCallback)(void) )
 {
     // Alustetaan timer2 callback
     timer2_Callback = userCallback;

@@ -2,8 +2,8 @@
 
 // Timer is initialized to generate 
 // a 1kHz overflow interrupt
-void initTimer2(void);
+void timer2_init(void);
 
 
 // Sets the timer2 interrupt callback
-void setTimer2_Callback( void (*userCallback)(void) );
+void timer2_setCallback( void (*userCallback)(void) );
