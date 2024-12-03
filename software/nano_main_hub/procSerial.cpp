@@ -12,12 +12,12 @@ void mirrorSerial(void) {
   if (Serial.available() > 0) {
 
     char c = (char)Serial.read();
-
+    
     if (c == '\n') {
 
       digitalWrite(LED_BUILTIN, HIGH);
 
-      pushBuf(0,i++);
+      setBuf(0,i++);
 
       Serial.write((char*)pointBuf());
       Serial.write("\n");
@@ -27,15 +27,9 @@ void mirrorSerial(void) {
       digitalWrite(LED_BUILTIN, LOW);
     } else {
 
-      pushBuf(c,i++);
+      setBuf(c,i++);
 
     }
   }
   
-}
-
-void initSerial(void) {
-
-  Serial.begin(BAUD_RATE,SERIAL_8N1);
-
 }

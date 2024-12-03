@@ -1,3 +1,3 @@
 Only atomic libraries may have their own directory. Other
 libraries which are dependent on other libraries should be
-located in the root /src directory.
+located in the root directory. Libraries go into /src directory.

@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "ioBuffer.h"
 #define BUFFER_SIZE 80
-constexpr int BUFFER_LIMIT = ( BUFFER_SIZE - 2 );
+const uint16_t BUFFER_LIMIT = ( BUFFER_SIZE - 2 );
 
 static uint8_t buf[BUFFER_SIZE];
 // ^common buffer
@@ -10,8 +10,8 @@ uint8_t* pointBuf(void) {
   return buf;
 }
 
-bool pushBuf(uint8_t c, uint16_t i) {
-// ^safe buffer push method
+bool setBuf(uint8_t c, uint16_t i) {
+// ^safe buffer set method
 
   if ( i > BUFFER_LIMIT ) {
 
