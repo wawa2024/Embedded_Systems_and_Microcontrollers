@@ -141,9 +141,14 @@ bool uniformHistory(void)
 }
 
 void readKeypad(void)
-{   
-    keyHistory[2] = keyHistory[1];
-    keyHistory[1] = keyHistory[0];
+{  
+    // Shift all characters forward in history
+    for(uint8_t i = historyLength; i > 0; i--)
+    {
+        keyHistory[i] = keyHistory[i-1];
+    }
+    
+    // New character is read
     keyHistory[0] = getCharacter();
 
     // Are all previous values equal
