@@ -10,7 +10,7 @@ uint8_t* pointBuf(void) {
   return buf;
 }
 
-bool pushBuf(unsigned int i, char c) {
+bool pushBuf(uint8_t c, uint16_t i) {
 // ^safe buffer push method
 
   if ( i > BUFFER_LIMIT ) {
@@ -26,7 +26,7 @@ bool pushBuf(unsigned int i, char c) {
 
 }
 
-uint8_t getBuf(unsigned int i) {
+uint8_t getBuf(uint16_t i) {
 // ^safe buffer get method
   
   if ( i < BUFFER_LIMIT ) {
