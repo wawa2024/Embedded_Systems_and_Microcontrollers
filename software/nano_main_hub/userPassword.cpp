@@ -53,5 +53,5 @@ char* getPassword(void) {
 
   }
 
-  return false;
+  return NULL;
 }
