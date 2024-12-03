@@ -19,7 +19,7 @@ ISR( TIMER2_OVF_vect )
     timer2_Callback();
 
     // Preloaded for 1kHz overflow
-    TCNT2 = preLoad; 
+    TCNT2 = preload; 
 }   
 
 
@@ -30,13 +30,13 @@ void timer2_init(void)
     TCCR2A = 0x00;
 
     // 128 prescaler
-    TCCR2B = 0x05;
+    TCCR2B = 0x04;
 
     // Overflow interrupt enabled
     TIMSK2 |= ( 1 << TOIE2 );
     
     // Preloaded for 1kHz overflow
-    TCNT2 = preLoad; 
+    TCNT2 = preload;
 }
 
 
