@@ -17,7 +17,7 @@ void mirrorSerial(void) {
 
       digitalWrite(LED_BUILTIN, HIGH);
 
-      pushBuf(i++,0);
+      pushBuf(0,i++);
 
       Serial.write((char*)pointBuf());
       Serial.write("\n");
@@ -27,7 +27,7 @@ void mirrorSerial(void) {
       digitalWrite(LED_BUILTIN, LOW);
     } else {
 
-      pushBuf(i++,c);
+      pushBuf(c,i++);
 
     }
   }
