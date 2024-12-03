@@ -36,6 +36,8 @@ int currentIndex = 0;
 AccelData previousStableAccel = {0, 0, 0};
 GyroData previousStableGyro = {0, 0, 0};
 
+void send_alarm();
+
 void setup() {
   Serial.begin(115200);
   Wire.begin(D1, D2);
@@ -185,8 +187,9 @@ void loop() {
 
   }
 
-  if (alarm == true) {
+  if (alarm == true && (millis() - alarmMillis) % 100 == 0) {
     Serial.print("Alarm ");
+    send_alarm();
     Serial.println(identifier);
     if (millis() - alarmMillis >= 2000) {
       Serial.print("Alarm timeout ");
@@ -194,15 +197,13 @@ void loop() {
       alarm = false;
     }
   }
-
-
 /*
   if (millis() - lastMillis >= 5000 && 
         WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     WiFiClient client;
     
-    http.begin(client, "http://192.168.4.1/hello");
+    http.begin(client, "http://192.168.4.1/alarm");
     int httpCode = http.GET();
     
     if (httpCode > 0) {
@@ -217,4 +218,23 @@ void loop() {
     lastMillis = millis();
   }
 */
+}
+
+void send_alarm() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    WiFiClient client;
+    
+    http.begin(client, "http://192.168.4.1/alarm");
+    int httpCode = http.GET();
+    
+    if (httpCode > 0) {
+      String payload = http.getString();
+      Serial.println("Received: " + payload);
+    } else {
+      Serial.println("Error on HTTP request");
+    }
+    
+    http.end();
+  }
 }
