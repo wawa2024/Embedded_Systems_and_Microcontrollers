@@ -53,7 +53,7 @@ bool tryPassword(char* str) {
     
   }
 
-  return false;
+  return NULL;
 }
 
 void setPassword(char* str) {
