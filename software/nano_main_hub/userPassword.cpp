@@ -4,29 +4,14 @@
 #include "ioBuffer.h"
 #include "src/eeprom/eeprom.h"
 
-bool tryPassword(char* str) {
-  // ^Try string with eeprom string
+#define PASSWORD_SIZE 32
+const int PASSWORD_LIMIT = PASSWORD_SIZE - 1;
+static char password[PASSWORD_SIZE] = {};
 
-  for ( uint16_t i = 0 ; i < 256 ; i++ ) {
-    eeprom_t cell;
-    cell.addr = i;
-    eeprom_read(cell);
+void string2eeprom(char* str) {
+// ^Read string and write into eeprom
 
-    if ( cell.data != str[i] )
-      return false;
-
-    if ( cell.data == '\0' )
-      return true;
-    
-  }
-
-  return false;
-}
-
-void setPassword(char* str) {
-  // ^Read string and write into eeprom
-
-  for ( uint16_t i = 0 ; i < 256 ; i++ ) {
+  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
     eeprom_t cell;
     cell.addr = i;
     cell.data = str[i];
@@ -38,20 +23,59 @@ void setPassword(char* str) {
   }
 }
 
-char* getPassword(void) {
-  // ^Read eeprom and return string
+char* eeprom2string(void) {
+// ^Read eeprom and return string
 
-  for ( uint16_t i = 0 ; i < 256 ; i++ ) {
+  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
     eeprom_t cell;
     cell.addr = i;
     eeprom_read(cell);
-    pushBuf(cell.data,i);
-    Serial.println(getBuf(i));
+    setBuf(cell.data,i);
     
     if ( cell.data == '\0' )
-      return pointBuf();
+      return (char*)pointBuf();
 
   }
 
+  return (char*)0;
+}
+
+bool tryPassword(char* str) {
+// ^Try password
+
+  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
+
+    if ( password[i] != str[i] )
+      break;
+
+    if ( password[i] == '\0' )
+      return true;
+    
+  }
+
   return false;
+}
+
+void setPassword(char* str) {
+// ^Set password on device
+  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) 
+    if ( password[i] = str[i] )
+      break;
+}
+
+char* getPassword(void) {
+// ^Get password on device
+  return password;
+}
+
+void savePassword(void) {
+// ^Save password into eeprom
+  string2eeprom(password);
+}
+
+void initPassword(void) {
+// ^Get password register from eeprom
+  char* str = eeprom2string();
+  if( str )
+    setPassword(str);
 }
