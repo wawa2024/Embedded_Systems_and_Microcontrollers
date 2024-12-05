@@ -19,6 +19,7 @@ bool procLogin(void) {
   lcd.setColor(BG_COLOR);
   lcd.clear();
   lcd.blink();
+  lcd.setCursor(0,1); lcd.print("pin="); lcd.print(getPassword()); lcd.setCursor(0,0);
   lcd.print("login:");
 
   uint8_t attempts = 0;
