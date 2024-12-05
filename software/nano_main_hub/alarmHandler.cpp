@@ -20,15 +20,13 @@ void register_alarm() {
 
   if (armed_state == 1) {
     alarm_state = true;
-    Serial.println("Opening detected, you have 30 seconds");
-    Serial.write("Opening detected, you have 30 seconds");
+    Serial.write("Opening detected, you have 30 seconds\n");
     bool login_state = procLogin();
   }
 }
 
 void trigger_alarm() {
-  Serial.println("Intrusion alert!");
-  Serial.write("Intrusion alert!");
+  Serial.write("Intrusion alert!\n");
 }
 
 void countdown() {
