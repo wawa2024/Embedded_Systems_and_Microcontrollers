@@ -5,12 +5,13 @@
 #include "ioBuffer.h"
 #include "src/I2C_LCD/I2C_LCD.h"
 #include "src/matrixKeyboard/matrixKeyboard.h"
+#include "src/keyGuard/keyGuard.h"
 #include "src/Debug/Debug.h"
 
 #define PASSWORD_LENGTH 8
 #define SCREEN_OFFSET 6
 #define BG_COLOR WHITE
-#define REFRESH_RATE 300
+#define REPEAT_RATE 300
 #define MAX_TRIALS 3
 #define MSG_TIMEOUT 3000
 
@@ -32,13 +33,10 @@ bool procLogin(void) {
   uint32_t prev_time = millis();
   char prev_c = 0;
 
-  char c;
-  uint32_t cur_time;
-  
   while ( true ) {
 
-    c = getKey();
-    cur_time = millis();
+    char c = getKey();
+    uint32_t cur_time = millis();
 
     DEBUG("error=",error);
     DEBUG("( cur_time > ( prev_time + 500 )=",( cur_time > ( prev_time + 500 )));
@@ -59,29 +57,8 @@ bool procLogin(void) {
       Serial.print(c);
       Serial.println(" <-- keyPress debugger");
 
-      if ( prev_c == c ) {
-
-        if ( debounce ) {
-
-          debounce = false;
-          repeat = true;
-          delay(100); // debounce timeout
-          continue;
-
-        }
-
-        if ( repeat ) {
-
-          delay(REFRESH_RATE); // refresh rate
-
-        }
-
-      } else {
-
-        debounce = true;
-        repeat = false;
-
-      }
+      if ( keyDebounce( prev_c == c, repeat, debounce) )
+        continue;
 
       prev_c = c;
 

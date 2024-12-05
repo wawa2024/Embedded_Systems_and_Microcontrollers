@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include "alarmStates.h"
 
 volatile uint8_t armed_state = 0;
 volatile bool alarm_state = false;
