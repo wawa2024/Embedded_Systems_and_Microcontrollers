@@ -1,6 +1,4 @@
 #pragma once
 
-void procLogin(void);
+bool procLogin(void);
 // ^Login program
-
-
