@@ -8,78 +8,110 @@
 
 #define PASSWORD_LENGTH 7
 #define SCREEN_OFFSET 6
+#define BG_COLOR WHITE
+#define REFRESH_RATE 300
+#define MAX_TRIALS 3
 
-void procLogin(void) {
+bool procLogin(void) {
 
-  lcd.setColor(BLUE);
+  lcd.setColor(BG_COLOR);
   lcd.clear();
   lcd.blink();
   lcd.print("login:");
 
+  uint8_t attempts = 0;
   uint16_t i = 0;
   char* buf = pointBuf();
   bool flag = false;
   bool error = false;
   uint32_t time = 0;
-
+  char prev_c = 0;
+  
   while ( true ) {
 
     readKeypad();
     char c = getPressedKey();
+    
+    if ( c != ' ' ) {
 
-    switch ( c ) {
+      Serial.print("keyPress:");
+      Serial.println(c);
 
-    case '0' ... '9': // password pin chars
-
-      setBuf(c,i);
-      lcd.write(c);
-
-      if ( i != PASSWORD_LENGTH ) i++;
-
-      break;
-
-    case 'D': // delete char
-
-      setBuf(0,i);
-      lcd.write(' ');
-      if ( i ) i--;
-      lcd.setCursor(SCREEN_OFFSET + i,0);
-
-      break;
+      if ( prev_c == c ) {
+        delay(REFRESH_RATE); // refresh rate
+      } 
       
-    case '#': // enter password
+      prev_c = c;
 
-      setBuf(0,PASSWORD_LENGTH + 1);
+      switch ( c ) {
 
-      flag = tryPassword(buf);
+      case '0' ... '9': // password pin chars
 
-      if ( flag ) {
+        setBuf(c,i);
+        lcd.write(c);
 
-        lcd.clear();
-        lcd.setColor(GREEN);
-        lcd.stopBlink();
-        return;
+        if ( i != PASSWORD_LENGTH ) i++;
+      
+        break;
 
-      } else {
+      case 'D': // delete char
 
-        lcd.setColor(RED);
-        time = millis();
-        error = true;
+        setBuf(0,i);
+        lcd.write(' ');
+        if ( i ) i--;
+        lcd.setCursor(SCREEN_OFFSET + i,0);
+
+        break;
+      
+      case '#': // enter password
+
+        setBuf(0,PASSWORD_LENGTH + 1);
+
+        flag = tryPassword(buf);
+
+        if ( flag ) {
+
+          lcd.clear();
+          lcd.setColor(GREEN);
+          lcd.stopBlink();
+          delay(1000);
+          lcd.clear();
+          lcd.stopBlink();
+          return true;
+
+        } else {
+
+          lcd.setColor(RED);
+          time = millis();
+          error = true;
+
+          if ( attempts == MAX_TRIALS ) {
+            lcd.clear();
+            lcd.print("Login failed");
+            delay(1000);
+            lcd.clear();
+            lcd.stopBlink();
+            return false;
+          }
+          attempts++;
+          
+        }
+
+        break;
+
+      default: break;
 
       }
 
-      break;
-
-    default: break;
-
+      if ( error ) // error feedback
+        if ( millis() > time + 3000 ) {
+          error = false;
+          lcd.setColor(BG_COLOR);
+        }
+      Serial.print("ioBuffer:");
+      Serial.println(buf);
     }
 
-    if ( error ) // error feedback
-      if ( millis() > time + 3000 ) {
-        error = false;
-        lcd.setColor(BLUE);
-      }
-    
   }
-
+  
 }
