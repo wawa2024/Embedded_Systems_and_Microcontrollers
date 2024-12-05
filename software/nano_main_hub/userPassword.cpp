@@ -4,9 +4,8 @@
 #include "ioBuffer.h"
 #include "src/eeprom/eeprom.h"
 
-#define PASSWORD_SIZE 32
+static char password[PASSWORD_SIZE];
 const int PASSWORD_LIMIT = PASSWORD_SIZE - 1;
-static char password[PASSWORD_SIZE] = {};
 
 void string2eeprom(char* str) {
 // ^Read string and write into eeprom
@@ -26,6 +25,8 @@ void string2eeprom(char* str) {
 char* eeprom2string(void) {
 // ^Read eeprom and return string
 
+  char* str = pointBuf();
+
   for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
     eeprom_t cell;
     cell.addr = i;
@@ -33,11 +34,10 @@ char* eeprom2string(void) {
     setBuf(cell.data,i);
     
     if ( cell.data == '\0' )
-      return (char*)pointBuf();
-
+      break;
   }
 
-  return (char*)0;
+  return str;
 }
 
 bool tryPassword(char* str) {
@@ -53,14 +53,20 @@ bool tryPassword(char* str) {
     
   }
 
-  return NULL;
+  return false;
 }
 
 void setPassword(char* str) {
 // ^Set password on device
-  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) 
-    if ( password[i] = str[i] )
+  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
+    
+    password[i] = str[i];
+    
+    if ( str[i] == '\0' ) {
       break;
+    }
+
+  }
 }
 
 char* getPassword(void) {
