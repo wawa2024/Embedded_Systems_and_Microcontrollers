@@ -1,8 +1,9 @@
+#include <Arduino.h>
+
 #include "alarmHandler.h"
-#include "states.h"
+#include "alarmStates.h"
 #include "userPassword.h"
 #include "procLogin.h"
-#include <Arduino.h>
 
 bool init_alarm() {
   pinMode(interrupt_pin, INPUT_PULLUP);
