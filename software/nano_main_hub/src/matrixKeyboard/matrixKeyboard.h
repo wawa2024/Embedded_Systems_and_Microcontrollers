@@ -12,3 +12,5 @@ uint8_t getPressedKey(void);
 // be called often ( 100-1000Hz )
 void readKeypad(void);
 
+uint8_t getKey(void);
+// ^Simplified getKey abstraction

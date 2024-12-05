@@ -9,3 +9,6 @@ uint8_t getBuf(uint16_t i);
 
 uint8_t* pointBuf(void);
 // ^Get buffer location
+
+void resetBuf(void);
+// ^Fill buffer with zeroes

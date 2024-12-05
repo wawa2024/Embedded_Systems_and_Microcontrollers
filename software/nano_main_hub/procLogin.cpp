@@ -5,12 +5,14 @@
 #include "ioBuffer.h"
 #include "src/I2C_LCD/I2C_LCD.h"
 #include "src/matrixKeyboard/matrixKeyboard.h"
+#include "src/Debug/Debug.h"
 
-#define PASSWORD_LENGTH 7
+#define PASSWORD_LENGTH 8
 #define SCREEN_OFFSET 6
 #define BG_COLOR WHITE
 #define REFRESH_RATE 300
 #define MAX_TRIALS 3
+#define MSG_TIMEOUT 3000
 
 bool procLogin(void) {
 
@@ -21,44 +23,92 @@ bool procLogin(void) {
 
   uint8_t attempts = 0;
   uint16_t i = 0;
-  char* buf = pointBuf();
+  char* str = pointBuf();
   bool flag = false;
   bool error = false;
-  uint32_t time = 0;
+  bool debounce = true;
+  bool repeat = false;
+  uint32_t prev_time = millis();
   char prev_c = 0;
+
+  char c;
+  uint32_t cur_time;
   
   while ( true ) {
 
-    readKeypad();
-    char c = getPressedKey();
+    c = getKey();
+    cur_time = millis();
+
+    DEBUG("error=",error);
+    DEBUG("( cur_time > ( prev_time + 500 )=",( cur_time > ( prev_time + 500 )));
+    DEBUG("cur_time=",cur_time);
+    DEBUG("prev_time=",prev_time);
+    DEBUG("millis()=",millis());
+    
+    // remove error red screen
+    if ( error and ( cur_time > ( prev_time + 500 ) ) )
+    {
+      lcd.setColor(BG_COLOR);
+      error = false;
+    }
     
     if ( c != ' ' ) {
 
       Serial.print("keyPress:");
-      Serial.println(c);
+      Serial.print(c);
+      Serial.println(" <-- keyPress debugger");
 
       if ( prev_c == c ) {
-        delay(REFRESH_RATE); // refresh rate
-      } 
-      
+
+        if ( debounce ) {
+
+          debounce = false;
+          repeat = true;
+          delay(100); // debounce timeout
+          continue;
+
+        }
+
+        if ( repeat ) {
+
+          delay(REFRESH_RATE); // refresh rate
+
+        }
+
+      } else {
+
+        debounce = true;
+        repeat = false;
+
+      }
+
       prev_c = c;
 
       switch ( c ) {
 
-      case '0' ... '9': // password pin chars
+      case '0': case '1': case '2': case '3': case '4':
+      case '5': case '6': case '7': case '8': case '9': // password pin chars
 
-        setBuf(c,i);
-        lcd.write(c);
+        if ( i < PASSWORD_LENGTH ) { 
+          
+          setBuf(c,i);
 
-        if ( i != PASSWORD_LENGTH ) i++;
-      
+          lcd.setCursor(SCREEN_OFFSET + i,0);
+          lcd.write(c);
+          lcd.setCursor(SCREEN_OFFSET + i + 1,0);         
+          
+          i++;
+        }
+
         break;
 
       case 'D': // delete char
 
+        if ( i ) i--;
+
+        lcd.setCursor(SCREEN_OFFSET + i,0);
         setBuf(0,i);
         lcd.write(' ');
-        if ( i ) i--;
         lcd.setCursor(SCREEN_OFFSET + i,0);
 
         break;
@@ -67,32 +117,41 @@ bool procLogin(void) {
 
         setBuf(0,PASSWORD_LENGTH + 1);
 
-        flag = tryPassword(buf);
+        flag = tryPassword(str);
 
         if ( flag ) {
 
           lcd.clear();
+
           lcd.setColor(GREEN);
           lcd.stopBlink();
-          delay(1000);
-          lcd.clear();
+
+          delay(MSG_TIMEOUT);
+
           lcd.stopBlink();
+
           return true;
 
         } else {
 
           lcd.setColor(RED);
-          time = millis();
+          prev_time = cur_time;
           error = true;
 
           if ( attempts == MAX_TRIALS ) {
+
             lcd.clear();
             lcd.print("Login failed");
-            delay(1000);
-            lcd.clear();
+
+            delay(MSG_TIMEOUT); // Display message MSG_TIMEOUT
+
+            resetBuf(); // Reset string ioBuffer
+
             lcd.stopBlink();
+
             return false;
           }
+
           attempts++;
           
         }
@@ -102,15 +161,9 @@ bool procLogin(void) {
       default: break;
 
       }
-
-      if ( error ) // error feedback
-        if ( millis() > time + 3000 ) {
-          error = false;
-          lcd.setColor(BG_COLOR);
-        }
-      Serial.print("ioBuffer:");
-      Serial.println(buf);
     }
+
+    delay(10); // 100 Hz refresh
 
   }
   

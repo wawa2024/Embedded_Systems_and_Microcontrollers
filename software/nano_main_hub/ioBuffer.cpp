@@ -3,11 +3,11 @@
 #define BUFFER_SIZE 80
 const uint16_t BUFFER_LIMIT = ( BUFFER_SIZE - 2 );
 
-static uint8_t buf[BUFFER_SIZE];
+static uint8_t ioBuffer[BUFFER_SIZE];
 // ^common buffer
 
 uint8_t* pointBuf(void) {
-  return buf;
+  return ioBuffer;
 }
 
 bool setBuf(uint8_t c, uint16_t i) {
@@ -19,7 +19,7 @@ bool setBuf(uint8_t c, uint16_t i) {
 
   } else {
 
-    buf[i] = c;
+    ioBuffer[i] = c;
     return false;
 
   }
@@ -31,7 +31,7 @@ uint8_t getBuf(uint16_t i) {
   
   if ( i < BUFFER_LIMIT ) {
 
-    return buf[i];
+    return ioBuffer[i];
 
   } else { 
 
@@ -39,4 +39,9 @@ uint8_t getBuf(uint16_t i) {
 
   }
 
+}
+
+void resetBuf(void) {
+  for ( uint8_t i = 0 ; i < BUFFER_SIZE ; i++ )
+    ioBuffer[i] = 0;
 }
