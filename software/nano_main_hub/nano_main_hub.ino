@@ -12,11 +12,9 @@ void setup() {
 }
 
 void loop(void) {
-
-  procLogin();
-
-  for(;;) {
-    mirrorSerial();
+  if( procLogin() ) {
+    for(;;) {
+      mirrorSerial();
+    }
   }
-
 }
