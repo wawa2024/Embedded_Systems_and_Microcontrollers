@@ -164,3 +164,10 @@ void readKeypad(void)
     }
 
 }
+
+uint8_t getKey(void)
+// ^Simplified getKey abstraction
+{
+  readKeypad();
+  return pressedKey;
+}
