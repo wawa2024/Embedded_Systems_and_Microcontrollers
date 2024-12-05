@@ -3,6 +3,7 @@
 
 const char* ssid = "main_hub";
 const char* password = "12345678";
+const uint8_t output = D5;
 
 uint32_t lastMillis = 0;
 uint32_t alarmMillis = 0;
@@ -14,7 +15,7 @@ void handleRoot();
 void setup() {
   Serial.begin(115200);
 
-  pinMode(D1, OUTPUT);
+  pinMode(output, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   
   WiFi.softAP(ssid, password);
@@ -31,8 +32,8 @@ void setup() {
 
 void loop() {
   server.handleClient();
-  if (millis() - alarmMillis >= 80) {
-    digitalWrite(D1, LOW);
+  if (millis() - alarmMillis >= 1000) {
+    digitalWrite(output, LOW);
     digitalWrite(LED_BUILTIN, HIGH);
     alarmMillis = millis();
   }
@@ -49,7 +50,7 @@ void handle_root() {
 
 void handle_alarm() {
   Serial.println("Alarm received");
-  digitalWrite(D1, HIGH);
+  digitalWrite(output, HIGH);
   digitalWrite(LED_BUILTIN, LOW);
   server.send(200, "text/plain", "Alarm received");
   alarmMillis = millis();
