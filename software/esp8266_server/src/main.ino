@@ -15,6 +15,7 @@ void setup() {
   Serial.begin(115200);
 
   pinMode(D1, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
   
   WiFi.softAP(ssid, password);
   
@@ -32,6 +33,13 @@ void loop() {
   server.handleClient();
   if (millis() - alarmMillis >= 80) {
     digitalWrite(D1, LOW);
+    digitalWrite(LED_BUILTIN, HIGH);
+    alarmMillis = millis();
+  }
+
+  if (millis() - lastMillis >= 10000) {
+    Serial.println("Server online");
+    lastMillis = millis();
   }
 }
 
@@ -42,6 +50,7 @@ void handle_root() {
 void handle_alarm() {
   Serial.println("Alarm received");
   digitalWrite(D1, HIGH);
+  digitalWrite(LED_BUILTIN, LOW);
   server.send(200, "text/plain", "Alarm received");
   alarmMillis = millis();
 }

@@ -43,6 +43,7 @@ void setup() {
   Wire.begin(D1, D2);
   WiFi.begin(ssid, password);
   pinMode(magnetPin, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 
   if (!imu.begin()) {
     Serial.println("Didn't detect MPU6050");
@@ -107,7 +108,7 @@ void loop() {
     averageGyro.z /= max_history;
 
 
-  if ((millis() - lastMillis) % 50 == 0) {
+  if ((millis() - lastMillis) % 500 == 0) {
     Serial.print("Acceleration X: ");
     Serial.print(averageAccel.x);
     Serial.print(", Y: ");
@@ -191,10 +192,12 @@ void loop() {
     Serial.print("Alarm ");
     send_alarm();
     Serial.println(identifier);
+    digitalWrite(LED_BUILTIN, LOW);
     if (millis() - alarmMillis >= 2000) {
       Serial.print("Alarm timeout ");
       Serial.println(identifier);
       alarm = false;
+      digitalWrite(LED_BUILTIN, HIGH);
     }
   }
 /*
