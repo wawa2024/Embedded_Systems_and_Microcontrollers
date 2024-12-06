@@ -6,7 +6,7 @@ static char initialPassword[PASSWORD_SIZE];
 
 void initialPassword_init( char* password )
 {   
-    if(p == NULL){ return; }
+    if(password == NULL){ return; }
 
     for(uint8_t i = 0; i < PASSWORD_SIZE; i++)
     {
