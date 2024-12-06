@@ -2,8 +2,6 @@
 #include "userPassword.h"
 #include "src/eeprom/eeprom.h"
 
-#define PASSWORD_SIZE 10
-
 static char password[PASSWORD_SIZE];
 
 bool tryPassword(char* str) {

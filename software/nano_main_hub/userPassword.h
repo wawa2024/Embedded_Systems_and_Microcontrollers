@@ -1,5 +1,7 @@
 #pragma once
 
+#define PASSWORD_SIZE 10
+
 bool tryPassword(char* str);
 // ^Try password on device
 

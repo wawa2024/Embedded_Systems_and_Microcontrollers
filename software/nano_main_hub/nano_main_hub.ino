@@ -1,5 +1,7 @@
+#include "Arduino.h"
 #include "src/I2C_LCD/I2C_LCD.h"
-#include "src/system/system.h"
+#include "src/timer/timer.h"
+#include "system.h"
 
 #include "alarmHandler.h"
 #include "userPassword.h"
@@ -17,8 +19,12 @@
 
 void setup() {
 
-  system_init( void (*timer1_callback)(void), void (*timer2_callback)(void) );
+  // v Maybe not put too many abstraction onto init process? 
+  // system_init(/*void (*timer1_callback) (void)*/ PUT_FUNC1_HERE, /*void (*timer2_callback) (void)*/ PUT_FUNC2_HERE); // Init system 
+
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
+
+  // initPassword(); // init password
 
 }
 

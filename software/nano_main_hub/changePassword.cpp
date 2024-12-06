@@ -7,6 +7,8 @@
 #include "src/matrixKeyboard/matrixKeyboard.h"
 #include "src/keyGuard/keyGuard.h"
 #include "src/Debug/Debug.h"
+#include "guiMessage.h"
+#include "storePassword.h"
 
 #define PASSWORD_LENGTH 8
 #define SCREEN_OFFSET 4
@@ -24,10 +26,8 @@ void changePassword(void) {
   lcd.blink();
   lcd.print("pin:");
 
-  uint16_t i = 0;
+  uint8_t i = 0;
   char* str = pointBuf();
-  bool flag = false;
-  bool error = false;
   bool debounce = true;
   bool repeat = false;
   char prev_c = 0;
@@ -80,13 +80,11 @@ void changePassword(void) {
 
         setPassword(str);
 
-        lcd.clear();
-        lcd.noCursor();
-        lcd.print("Password changed");
-        lcd.setColor(GREEN);
-        delay(MSG_TIMEOUT);
-        lcd.stopBlink();
-        lcd.cursor();
+        lcdSuccess("Password changed");
+
+        storePassword();
+
+        return;
 
         break;
 

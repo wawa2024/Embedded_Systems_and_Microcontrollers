@@ -7,6 +7,7 @@
 #include "src/matrixKeyboard/matrixKeyboard.h"
 #include "src/keyGuard/keyGuard.h"
 #include "src/Debug/Debug.h"
+#include "guiMessage.h"
 
 #define PASSWORD_LENGTH 8
 #define SCREEN_OFFSET 6
@@ -20,31 +21,29 @@ bool procLogin(void) {
   lcd.setColor(BG_COLOR);
   lcd.clear();
   lcd.blink();
-  lcd.setCursor(0,1); lcd.print("pin="); lcd.print(getPassword()); lcd.setCursor(0,0);
+  lcd.cursor();
+  lcd.setCursor(0,1); lcd.print("pin="); lcd.print(getPassword()); lcd.setCursor(0,0); // comment out this section when used
   lcd.print("login:");
 
   uint8_t attempts = 0;
   uint16_t i = 0;
+
   char* str = pointBuf();
-  bool flag = false;
   bool error = false;
-  bool debounce = true;
-  bool repeat = false;
+
   uint32_t prev_time = millis();
+
   char prev_c = 0;
   char tmp_c = 0;
+
+  bool debounce = true;
+  bool repeat = false;
 
   while ( true ) {
 
     char c = getKey();
     uint32_t cur_time = millis();
 
-    DEBUG("error=",error);
-    DEBUG("( cur_time > ( prev_time + 500 )=",( cur_time > ( prev_time + 500 )));
-    DEBUG("cur_time=",cur_time);
-    DEBUG("prev_time=",prev_time);
-    DEBUG("millis()=",millis());
-    
     // remove error red screen
     if ( error and ( cur_time > ( prev_time + 500 ) ) )
     {
@@ -54,11 +53,7 @@ bool procLogin(void) {
     
     if ( c != ' ' ) {
 
-      Serial.print("keyPress:");
-      Serial.print(c);
-      Serial.println(" <-- keyPress debugger");
-
-      tmp_c = prev_c
+      tmp_c = prev_c;
       prev_c = c;
       
       if ( keyDebounce( tmp_c == c, repeat, debounce) )
@@ -67,7 +62,7 @@ bool procLogin(void) {
       switch ( c ) {
 
       case '0': case '1': case '2': case '3': case '4':
-      case '5': case '6': case '7': case '8': case '9': // password pins
+      case '5': case '6': case '7': case '8': case '9': // input pins
 
         if ( i < PASSWORD_LENGTH ) { 
           
@@ -82,7 +77,7 @@ bool procLogin(void) {
 
         break;
 
-      case 'D': // delete char
+      case 'D': // delete
 
         if ( i ) i--;
 
@@ -93,45 +88,31 @@ bool procLogin(void) {
 
         break;
       
-      case '#': // enter password
+      case '#': // enter 
 
         setBuf(0,PASSWORD_LENGTH + 1);
 
-        flag = tryPassword(str);
+        if ( tryPassword(str) ) {
 
-        if ( flag ) {
-
-          lcd.clear();
-
-          lcd.setColor(GREEN);
-          lcd.stopBlink();
-
-          delay(MSG_TIMEOUT);
-
-          lcd.stopBlink();
+          lcdSuccess("Login accepted");
 
           return true;
 
         } else {
 
-          lcd.setColor(RED);
-          prev_time = cur_time;
-          error = true;
-
           if ( attempts == MAX_TRIALS ) {
 
-            lcd.clear();
-            lcd.print("Login failed");
-
-            delay(MSG_TIMEOUT); // Display message MSG_TIMEOUT
+            lcdFail("Login rejected");
 
             resetBuf(); // Reset string ioBuffer
 
-            lcd.stopBlink();
-
             return false;
+
           }
 
+          lcd.setColor(RED);
+          prev_time = cur_time;
+          error = true;
           attempts++;
           
         }
