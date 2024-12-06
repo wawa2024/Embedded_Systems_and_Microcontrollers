@@ -29,7 +29,6 @@ void setup() {
 }
 
 void loop(void) {
-
   if( not procLogin() ) // Exit if failed login
     return;
 
@@ -46,5 +45,4 @@ void loop(void) {
     }
 
   }
-
 }

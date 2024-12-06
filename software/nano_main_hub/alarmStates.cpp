@@ -1,6 +1,6 @@
 #include "alarmStates.h"
 
-volatile uint8_t armed_state = 0;
+volatile uint8_t armed_state = 1;
 volatile bool alarm_state = false;
 volatile long long alarm_time = 0;
 volatile bool login_state = false;
