@@ -1,35 +1,36 @@
 #include <stdint.h>
 #include "ioBuffer.h"
+
 #define BUFFER_SIZE 80
-const uint16_t BUFFER_LIMIT = ( BUFFER_SIZE - 2 );
 
 static uint8_t ioBuffer[BUFFER_SIZE];
-// ^common buffer
+// ^common fifo buffer
 
 uint8_t* pointBuf(void) {
+  // ^Get ioBuffer location
   return ioBuffer;
 }
 
-bool setBuf(uint8_t c, uint16_t i) {
+bool setBuf(uint8_t c, uint8_t i) {
 // ^safe buffer set method
 
-  if ( i > BUFFER_LIMIT ) {
+  if ( i < BUFFER_SIZE ) {
 
+    ioBuffer[i] = c;
     return true;
 
   } else {
 
-    ioBuffer[i] = c;
     return false;
 
   }
 
 }
 
-uint8_t getBuf(uint16_t i) {
+uint8_t getBuf(uint8_t i) {
 // ^safe buffer get method
   
-  if ( i < BUFFER_LIMIT ) {
+  if ( i < BUFFER_SIZE ) {
 
     return ioBuffer[i];
 
@@ -42,6 +43,12 @@ uint8_t getBuf(uint16_t i) {
 }
 
 void resetBuf(void) {
+  // ^Fill ioBuffer with zeros
   for ( uint8_t i = 0 ; i < BUFFER_SIZE ; i++ )
     ioBuffer[i] = 0;
+}
+
+uint8_t sizeBuf(void) {
+  // ^Return size of ioBuffer
+  return BUFFER_SIZE;
 }
