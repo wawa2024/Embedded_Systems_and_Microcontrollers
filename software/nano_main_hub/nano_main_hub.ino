@@ -23,12 +23,14 @@ void setup() {
   // system_init(/*void (*timer1_callback) (void)*/ PUT_FUNC1_HERE, /*void (*timer2_callback) (void)*/ PUT_FUNC2_HERE); // Init system 
 
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
-
+//  init_alarm(); // solo nano test setting
   // initPassword(); // init password
 
 }
 
 void loop(void) {
+  poll_alarm_state(); // solo nano test setting, comment rest of loop out
+  
   if( not procLogin() ) // Exit if failed login
     return;
 
@@ -45,4 +47,5 @@ void loop(void) {
     }
 
   }
+
 }

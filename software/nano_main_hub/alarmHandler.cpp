@@ -15,24 +15,25 @@ void register_alarm() {
     alarm_time = millis();
   }
 
-  if (armed_state == 1) {
+  if (armed_state == 1 && alarm_state == false) {
     alarm_state = true;
     Serial.write("Opening detected, you have 30 seconds\n");
-    bool login_state = procLogin();
+//    bool login_state = procLogin(); // doesn't work on solo nano
   }
 }
 
 void trigger_alarm() {
   Serial.write("Intrusion alert!\n");
-  Serial.println("Intrusion alert!\n"); // for debug
 }
 
-void countdown() {
+void poll_alarm_state() {
   if (login_state == true) {
     alarm_state = false;
+    Serial.write("Alarm disabled\n");
   }
 
   if (alarm_state == true && millis() - alarm_time >= 3000) {
+    alarm_time = millis();
     trigger_alarm();
   }
 }

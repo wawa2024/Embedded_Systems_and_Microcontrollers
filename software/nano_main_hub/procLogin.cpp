@@ -8,6 +8,7 @@
 #include "src/keyGuard/keyGuard.h"
 #include "src/Debug/Debug.h"
 #include "guiMessage.h"
+#include "alarmHandler.h"
 
 #define PASSWORD_LENGTH 8
 #define SCREEN_OFFSET 6
@@ -40,6 +41,7 @@ bool procLogin(void) {
   bool repeat = false;
 
   while ( true ) {
+    poll_alarm_state(); // need to poll the alarm while in infinite loop
 
     char c = getKey();
     uint32_t cur_time = millis();
