@@ -16,10 +16,8 @@
 
 void setup() {
 
-  lcd.init(); // init I2C lcd
+  system_init( void (*timer1_callback)(void), void (*timer2_callback)(void) );
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
-  init_alarm();
-  // initPassword(); // read saved eeprom2 password and save to register
 
 }
 
