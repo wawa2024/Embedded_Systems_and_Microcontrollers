@@ -1,10 +1,10 @@
 #pragma once
 
 // Key struct for nokiaKeyboard
-struct Key {
+struct nokiaKey {
   bool overwrite;
   char character;
 };
 
-// Evaluate character into Key
-Key evalKey(char c);
+nokiaKey evalNokia(char c);
+// ^Evaluate character into a nokiaKey

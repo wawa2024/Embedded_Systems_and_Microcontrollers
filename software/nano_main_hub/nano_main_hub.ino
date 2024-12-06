@@ -7,6 +7,9 @@
 #include "procLogin.h"
 #include "procMenu.h"
 
+#include "changePassword.h"
+#include "storePassword.h"
+
 #define BAUD_RATE 115200
 
 #include "src/Debug/Debug.h"
@@ -22,18 +25,18 @@ void setup() {
 
 void loop(void) {
 
-  if( procLogin() ) {
-    // ^Wait for successful login
+  if( not procLogin() ) // Exit if failed login
+    return;
 
-    for (uint8_t i ; i = procMenu() ; ) {
-      // ^Main menu program loop
+  for (uint8_t i ; i = procMenu() ; ) {
+    // ^Main menu program loop
 
-      switch(i) {
+    switch(i) {
 
-      default:
-        break;
+    case 1: changePassword(); break;
+    case 2: storePassword(); break;
 
-      }
+    default: break;
 
     }
 
