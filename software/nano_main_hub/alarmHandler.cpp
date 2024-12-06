@@ -6,12 +6,8 @@
 #include "procLogin.h"
 
 bool init_alarm() {
-  pinMode(interrupt_pin, INPUT_PULLUP);
+  pinMode(interrupt_pin, INPUT);
   attachInterrupt(digitalPinToInterrupt(interrupt_pin), register_alarm, RISING);
-}
-
-void poll_alarm() {
-  countdown();
 }
 
 void register_alarm() {
@@ -28,6 +24,7 @@ void register_alarm() {
 
 void trigger_alarm() {
   Serial.write("Intrusion alert!\n");
+  Serial.println("Intrusion alert!\n"); // for debug
 }
 
 void countdown() {
@@ -35,7 +32,7 @@ void countdown() {
     alarm_state = false;
   }
 
-  if (alarm_state = true && millis() - alarm_time >= 3000 && alarm_state == true) {
+  if (alarm_state == true && millis() - alarm_time >= 3000) {
     trigger_alarm();
   }
 }
