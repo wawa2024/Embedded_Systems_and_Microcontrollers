@@ -2,6 +2,7 @@
 
 #include "src/I2C_LCD/I2C_LCD.h"
 #include "src/timer/timer.h"
+#include "src/watchdog/watchdog.h"
 #include "userPassword.h"
 #include "alarmHandler.h"
 
@@ -23,7 +24,7 @@ void initialPassword_init( char *password )
 void system_init( void (*timer1_callback)(void), void (*timer2_callback)(void) )
 {
     timer1_setCallback(timer1_callback);
-    timer2_setCallback(timer2_callback)
+    timer2_setCallback(timer2_callback);
     
     timer1_init();
     timer2_init();

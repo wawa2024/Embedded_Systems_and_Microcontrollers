@@ -28,7 +28,7 @@ nokiaKey getNokia(char c,uint8_t i) {
   uint32_t elapsed_t = t > prev_t ? t - prev_t : t; 
   // ^error check + calc
   
-  bool bool_t = elapsed_t < TIMEOUT
+  bool bool_t = elapsed_t < TIMEOUT;
   // ^bool eval elapsed time is less than a timeout
   
   prev_t = t; 
@@ -43,12 +43,12 @@ nokiaKey getNokia(char c,uint8_t i) {
     c = alpha[i][j]; 
     // ^get char
 
-    return Key{ true, c };
+    return nokiaKey{ true, c };
 
   } else {
    
     j = 0;
-    return Key{ false, c };
+    return nokiaKey{ false, c };
 
   }
 }
@@ -63,7 +63,7 @@ nokiaKey evalNokia(char c) {
       break;
 
     default: 
-      return Key{ false, c };
+      return nokiaKey{ false, c };
       break;
   }
 
