@@ -17,6 +17,7 @@ void setup() {
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
   init_alarm();
   // initPassword(); // read saved eeprom2 password and save to register
+
 }
 
 void loop(void) {

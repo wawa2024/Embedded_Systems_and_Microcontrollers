@@ -1,8 +1,5 @@
 #pragma once
 
-#define PASSWORD_SIZE 32
-extern char password[PASSWORD_SIZE];
-
 bool tryPassword(char* str);
 // ^Try password on device
 
