@@ -50,3 +50,27 @@ void eeprom_write(eeprom_t &d)
     // Enable interrupts after the read operation
     __asm__ ("sei");
 }
+
+void buffer2eeprom(uint8_t offset, uint8_t size, uint8_t* buf) {
+// ^Read buffer into eeprom
+
+  for ( uint16_t i = 0 ; i < size ; i++ ) {
+    eeprom_t cell;
+    cell.addr = offset + i;
+    cell.data = buf[i];
+    eeprom_write(cell);
+  }
+
+}
+
+void eeprom2buffer(uint8_t offset, uint8_t size, uint8_t* buf) {
+// ^Read eeprom into buffer
+
+  for ( uint16_t i = 0 ; i < size ; i++ ) {
+    eeprom_t cell;
+    cell.addr = offset + i;
+    eeprom_read(cell);
+    buf[i] = cell.data;
+  }
+
+}

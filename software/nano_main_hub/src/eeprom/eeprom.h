@@ -17,3 +17,8 @@ void eeprom_read(eeprom_t &d);
 // Writes a byte to eeprom memory
 void eeprom_write(eeprom_t &d);
 
+void buffer2eeprom(uint8_t offset, uint8_t size, uint8_t* buf);
+// ^Read buffer into eeprom
+
+void eeprom2buffer(uint8_t offset, uint8_t size, uint8_t* buf);
+// ^Read eeprom into buffer

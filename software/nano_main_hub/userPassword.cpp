@@ -1,55 +1,24 @@
 #include <stdint.h>
-#include <Arduino.h>
 #include "userPassword.h"
-#include "ioBuffer.h"
 #include "src/eeprom/eeprom.h"
 
+#define PASSWORD_SIZE 10
+
 static char password[PASSWORD_SIZE];
-const int PASSWORD_LIMIT = PASSWORD_SIZE - 1;
-
-void string2eeprom(char* str) {
-// ^Read string and write into eeprom
-
-  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
-    eeprom_t cell;
-    cell.addr = i;
-    cell.data = str[i];
-    eeprom_write(cell);
-
-    if ( cell.data == '\0' )
-      break;
-
-  }
-}
-
-char* eeprom2string(void) {
-// ^Read eeprom and return string
-
-  char* str = pointBuf();
-
-  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
-    eeprom_t cell;
-    cell.addr = i;
-    eeprom_read(cell);
-    setBuf(cell.data,i);
-    
-    if ( cell.data == '\0' )
-      break;
-  }
-
-  return str;
-}
 
 bool tryPassword(char* str) {
 // ^Try password
 
-  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
+  for ( uint8_t i = 0 ; i < PASSWORD_SIZE ; i++ ) {
 
     if ( password[i] != str[i] )
       break;
 
-    if ( password[i] == '\0' )
+    if ( password[i] == '\0' and str[i] == '\0' )
       return true;
+
+    if ( password[i] == '\0' or str[i] == '\0' )
+      break;
     
   }
 
@@ -58,30 +27,27 @@ bool tryPassword(char* str) {
 
 void setPassword(char* str) {
 // ^Set password on device
-  for ( uint16_t i = 0 ; i < PASSWORD_LIMIT ; i++ ) {
+  for ( uint8_t i = 0 ; i < PASSWORD_SIZE ; i++ ) {
     
     password[i] = str[i];
     
-    if ( str[i] == '\0' ) {
+    if ( str[i] == '\0' )
       break;
-    }
 
   }
 }
 
 char* getPassword(void) {
-// ^Get password on device
+  // ^Get password on device
   return password;
 }
 
 void savePassword(void) {
-// ^Save password into eeprom
-  string2eeprom(password);
+  // ^Save password into eeprom
+  buffer2eeprom(0,PASSWORD_SIZE,password);
 }
 
 void initPassword(void) {
-// ^Get password register from eeprom
-  char* str = eeprom2string();
-  if( str )
-    setPassword(str);
+  // ^Get password register from eeprom
+  eeprom2buffer(0,PASSWORD_SIZE,password);
 }
