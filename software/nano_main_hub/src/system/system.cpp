@@ -9,7 +9,7 @@
 static char initialPassword[PASSWORD_SIZE];
 
 
-void initialPassword_init( char* password )
+void initialPassword_init( char *password )
 {   
     if(password == NULL){ return; }
 
@@ -62,5 +62,18 @@ void system_reboot(void)
 
 void system_saveChanges(void)
 {
-    
+    char *tmp = getPassword();
+    for(uint8_t i = 0; i < PASSWORD_SIZE; i++)
+    {   
+        // If both of the passwords match then don't save it
+        if( initialPassword[i] == '\0' && tmp[i] == '\0' ){ break; }
+
+        // if passwords don't match then save current 
+        // password to eeprom
+        if( initialPassword[i] != tmp[i] )
+        { 
+            savePassword();
+            break;
+        }
+    } 
 }
