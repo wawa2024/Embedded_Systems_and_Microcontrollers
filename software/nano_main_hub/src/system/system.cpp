@@ -1,10 +1,10 @@
 #include "system.h"
 
-#include "src/I2C_LCD/I2C_LCD.h"
-#include "src/timer/timer.h"
-#include "src/watchdog/watchdog.h"
-#include "userPassword.h"
-#include "alarmHandler.h"
+#include "../I2C_LCD/I2C_LCD.h"
+#include "../timer/timer.h"
+#include "../watchdog/watchdog.h"
+#include "../../userPassword.h"
+#include "../../alarmHandler.h"
 
 
 static char initialPassword[PASSWORD_SIZE];

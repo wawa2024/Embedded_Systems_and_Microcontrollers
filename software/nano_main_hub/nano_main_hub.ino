@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "src/I2C_LCD/I2C_LCD.h"
 #include "src/timer/timer.h"
-#include "system.h"
+#include "src/system/system.h"
 
 #include "alarmHandler.h"
 #include "userPassword.h"
