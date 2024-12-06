@@ -1,6 +1,6 @@
-#include "timer.h"
 #include <stdint.h>
 #include <Arduino.h>
+#include "timer.h"
 
 
 // counter preload for timer1 (1kHz). Theoretical value is 250, 

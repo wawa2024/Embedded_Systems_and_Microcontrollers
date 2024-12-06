@@ -11,12 +11,14 @@ enum scrollDirection { scrollUp, scrollDown, };
 enum screenItem { screenTop, screenBottom };
 
 char* items[] = { "Exit"
-  , "Set Password"
+  , "changePassword"
+  , "storePassword"
 };
 
 const uint8_t amount_items = sizeof(items) / sizeof(char*);
 
 void tailMenu(int8_t i) {
+  // ^Draw tail item
   if ( 0 <= i and i < amount_items ) {
     lcd.setCursor(0,screenTop);
     lcd.print(" "); lcd.print(items[i]);
@@ -24,11 +26,13 @@ void tailMenu(int8_t i) {
 }
 
 void headMenu(int8_t i) {
+  // ^Draw head item
   lcd.setCursor(0,screenBottom);
   lcd.print(">"); lcd.print(items[i]);
 }
 
 void drawMenu(scrollDirection scrollVal, int8_t i) {
+  // ^Draw items on screen
 
   lcd.clear();
   
@@ -65,6 +69,7 @@ uint8_t procMenu(void) {
   bool debounce = true;
 
   char prev_c = 0;
+  char tmp_c = 0;
 
   while ( true ) {
 
@@ -72,10 +77,11 @@ uint8_t procMenu(void) {
 
     if ( c != ' ' ) {
 
-      if ( keyDebounce( prev_c == c, repeat, debounce) )
-        continue;
-
+      tmp_c = prev_c;
       prev_c = c;
+
+      if ( keyDebounce( tmp_c == c, repeat, debounce) )
+        continue;
 
       switch ( c ) {
 

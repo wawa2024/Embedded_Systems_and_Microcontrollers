@@ -32,6 +32,7 @@ bool procLogin(void) {
   bool repeat = false;
   uint32_t prev_time = millis();
   char prev_c = 0;
+  char tmp_c = 0;
 
   while ( true ) {
 
@@ -57,15 +58,16 @@ bool procLogin(void) {
       Serial.print(c);
       Serial.println(" <-- keyPress debugger");
 
-      if ( keyDebounce( prev_c == c, repeat, debounce) )
-        continue;
-
+      tmp_c = prev_c
       prev_c = c;
+      
+      if ( keyDebounce( tmp_c == c, repeat, debounce) )
+        continue;
 
       switch ( c ) {
 
       case '0': case '1': case '2': case '3': case '4':
-      case '5': case '6': case '7': case '8': case '9': // password pin chars
+      case '5': case '6': case '7': case '8': case '9': // password pins
 
         if ( i < PASSWORD_LENGTH ) { 
           
