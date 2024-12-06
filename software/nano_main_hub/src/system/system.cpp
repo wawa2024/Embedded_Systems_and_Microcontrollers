@@ -1,8 +1,13 @@
 #include "system.h"
+
 #include "src/I2C_LCD/I2C_LCD.h"
+#include "src/timer/timer.h"
 #include "userPassword.h"
+#include "alarmHandler.h"
+
 
 static char initialPassword[PASSWORD_SIZE];
+
 
 void initialPassword_init( char* password )
 {   
@@ -13,6 +18,7 @@ void initialPassword_init( char* password )
         initialPassword[i] = password[i];
     }
 }
+
 
 void system_init( void (*timer1_callback)(void), void (*timer2_callback)(void) )
 {
@@ -26,7 +32,7 @@ void system_init( void (*timer1_callback)(void), void (*timer2_callback)(void) )
     lcd.init(); 
     
     // read saved eeprom2 password and save to register
-  // initPassword(); 
+    initPassword(); 
     
     // Initialize the initial password variable
     // so that when the device is reset the password
