@@ -13,6 +13,8 @@
 
 #define RESPONSE_LENGTH 1
 
+#define PROMPT_ROW 1
+
 void storePassword(void) {
   // ^store Password program
 
@@ -52,9 +54,9 @@ void storePassword(void) {
           
             setBuf(c,i);
 
-            lcd.setCursor(SCREEN_OFFSET + i,0);
+            lcd.setCursor(SCREEN_OFFSET + i,PROMPT_ROW);
             lcd.write(c);
-            lcd.setCursor(SCREEN_OFFSET + i + 1,0);         
+            lcd.setCursor(SCREEN_OFFSET + i + 1,PROMPT_ROW);         
           
             i++;
           }
@@ -65,10 +67,10 @@ void storePassword(void) {
 
           if ( i ) i--;
 
-          lcd.setCursor(SCREEN_OFFSET + i,0);
+          lcd.setCursor(SCREEN_OFFSET + i,PROMPT_ROW);
           setBuf(0,i);
           lcd.write(' ');
-          lcd.setCursor(SCREEN_OFFSET + i,0);
+          lcd.setCursor(SCREEN_OFFSET + i,PROMPT_ROW);
 
           break;
       
