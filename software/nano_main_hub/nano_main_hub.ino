@@ -3,7 +3,6 @@
 #include "src/timer/timer.h"
 #include "src/system/system.h"
 
-#include "ioBuffer.h"
 #include "alarmHandler.h"
 #include "alarmStates.h"
 #include "userPassword.h"
@@ -38,7 +37,9 @@ void loop(void) {
   if( not procLogin() ) // Exit if failed login
     return;
 
-  disableAlarm();
+  if (alarm_state == true || alarm_activated == true) {
+    disableAlarm();
+  }
 
   for (uint8_t i ; i = procMenu() ; ) {
     // ^Main menu program loop
