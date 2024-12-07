@@ -55,6 +55,8 @@ void loop(void) {
 
     }
 
+    resetBuf(); // clean ioBuffer with zeroes
+
   }
 
 }
