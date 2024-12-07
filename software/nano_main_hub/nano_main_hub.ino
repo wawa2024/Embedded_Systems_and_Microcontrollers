@@ -33,7 +33,7 @@ void setup() {
 }
 
 void loop(void) {
-  poll_alarm_state(); // solo nano test setting, comment rest of loop out
+  poll_alarm_state(); // poll alarm state
 
   if( not procLogin() ) // Exit if failed login
     return;
@@ -58,8 +58,6 @@ void loop(void) {
     }
     
     resetBuf(); // clean ioBuffer with zeroes
-
-    if ( alarm_state ) return; // if alarm, logout from device
 
   }
 
