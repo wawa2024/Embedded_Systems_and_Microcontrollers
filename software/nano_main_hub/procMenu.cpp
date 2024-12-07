@@ -14,6 +14,8 @@ enum screenItem { screenTop = 0, screenBottom = 1 };
 char* items[] = { "Exit"
   , "changePassword"
   , "storePassword"
+  , "arm alarm"
+  , "disarm alarm"
 };
 
 const uint8_t amount_items = sizeof(items) / sizeof(char*);

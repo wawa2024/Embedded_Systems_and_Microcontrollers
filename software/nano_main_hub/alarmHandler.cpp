@@ -10,6 +10,18 @@ bool init_alarm() {
   attachInterrupt(digitalPinToInterrupt(interrupt_pin), register_alarm, RISING);
 }
 
+void armAlarm() {
+  armed_state = 1;
+}
+
+void disarmAlarm() {
+  armed_state = 0;
+}
+
+void disableAlarm() {
+  alarm_state = false;
+}
+
 void register_alarm() {
   if (alarm_state == false) {
     alarm_time = millis();
