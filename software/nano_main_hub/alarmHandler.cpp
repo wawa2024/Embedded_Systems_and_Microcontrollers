@@ -36,7 +36,7 @@ void register_alarm() {
 
   if (armed_state == 1 && alarm_state == false) {
     alarm_state = true;
-    Serial.write("Opening detected, you have 30 seconds\n");
+    Serial.write("Opening detected, you have thirty seconds\n");
   }
 }
 
