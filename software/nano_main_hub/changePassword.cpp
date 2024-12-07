@@ -33,6 +33,8 @@ void changePassword(void) {
   char prev_c = 0;
   char tmp_c = 0;
 
+  delay(100); // initial debounce delay
+
   while ( true ) {
 
     char c = getKey();
