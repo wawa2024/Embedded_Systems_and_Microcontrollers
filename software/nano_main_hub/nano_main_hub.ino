@@ -35,6 +35,8 @@ void loop(void) {
   if( not procLogin() ) // Exit if failed login
     return;
 
+  disableAlarm();
+
   for (uint8_t i ; i = procMenu() ; ) {
     // ^Main menu program loop
 
@@ -42,6 +44,8 @@ void loop(void) {
 
     case 1: changePassword(); break;
     case 2: storePassword(); break;
+    case 3: armAlarm(); break;
+    case 4: disarmAlarm(); break;
 
     default: break;
 
