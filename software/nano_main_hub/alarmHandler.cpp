@@ -75,7 +75,7 @@ bool poll_alarm_state() {
         buzzer_state = !buzzer_state;
       }
         
-/*
+/* // speech countdown
       if (millis() - alarm_time >= alarm_delay - alarm_countdown * 1000) {
         char buffer[3];
         sprintf(buffer, "%d\n", alarm_countdown);
@@ -94,9 +94,23 @@ bool poll_alarm_state() {
       }
     }
 
-    if (alarm_activated == true && millis() - alarm_time >= alert_cadence) {
-      alarm_time = millis();
-      trigger_alarm();
+    if (alarm_activated == true) {
+      if (millis() - alarm_time >= alert_cadence) {
+        alarm_time = millis();
+        trigger_alarm();
+      }
+      
+      if (buzzer_state == true && millis() - alarm_time >= buzzer_time) {
+        digitalWrite(buzzer_pin, buzzer_state);
+        buzzer_time += 100;
+        buzzer_state = !buzzer_state;
+      }
+
+      if (buzzer_state == false && millis() - alarm_time >= buzzer_time) {
+        digitalWrite(buzzer_pin, buzzer_state);
+        buzzer_time += 400;
+        buzzer_state = !buzzer_state;
+      }
     }
 
     return true;
