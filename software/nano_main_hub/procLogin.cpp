@@ -9,6 +9,7 @@
 #include "src/Debug/Debug.h"
 #include "guiMessage.h"
 #include "alarmHandler.h"
+#include "alarmStates.h"
 
 #define PASSWORD_LENGTH 8
 #define SCREEN_OFFSET 6
@@ -43,6 +44,8 @@ bool procLogin(void) {
   delay(100); // initial debounce delay
   
   while ( true ) {
+
+    if ( alarm_state and inside_menu ) return; // return if inside menu and alarm is on
 
     char c = getKey();
     uint32_t cur_time = millis();

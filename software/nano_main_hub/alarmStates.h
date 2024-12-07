@@ -13,3 +13,5 @@ extern uint8_t alarm_countdown;
 
 extern const uint8_t interrupt_pin;
 extern const uint8_t buzzer_pin;
+
+extern bool inside_menu;
