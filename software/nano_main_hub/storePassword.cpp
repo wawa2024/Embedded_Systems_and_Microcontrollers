@@ -34,6 +34,8 @@ void storePassword(void) {
     char tmp_c = 0;
     uint8_t i = 0;
     
+    delay(100); // initial debounce delay
+
     for ( bool boolScan = true ; boolScan ; ) {
 
       char c = getKey();

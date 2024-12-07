@@ -40,6 +40,8 @@ bool procLogin(void) {
   bool debounce = true;
   bool repeat = false;
 
+  delay(100); // initial debounce delay
+  
   while ( true ) {
     poll_alarm_state(); // need to poll the alarm while in infinite loop
 
