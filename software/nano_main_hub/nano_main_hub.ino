@@ -26,6 +26,7 @@ void setup() {
   lcd.init(); // init lcd
   init_alarm(); // solo nano test setting
   // initPassword(); // init password
+  Serial.write("\n");
 
 }
 
