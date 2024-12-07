@@ -100,6 +100,8 @@ bool procLogin(void) {
 
           lcdSuccess("Login accepted");
 
+          resetBuf(); // clean ioBuffer with zeroes
+
           return true;
 
         } else {
@@ -107,6 +109,8 @@ bool procLogin(void) {
           if ( attempts == MAX_TRIALS ) {
 
             lcdFail("Login rejected");
+
+            resetBuf(); // clean ioBuffer with zeroes
 
             return false;
 
