@@ -30,12 +30,14 @@ void setup() {
   Serial.write("\n"); // start Serial com esp32
   lcd.init(); // init lcd
   init_alarm(); // solo nano test setting
-  initPassword(); // init password
+  // initPassword(); // init password
 
 }
 
 void loop(void) {
 
+  inside_menu = false;
+  
   if( not procLogin() ) // Exit if failed login
     return;
 
@@ -45,6 +47,8 @@ void loop(void) {
 
   for (uint8_t i = procMenu() ; true ; i = procMenu() ) {
     // ^Main menu program loop
+
+    inside_menu = true;
 
     switch(i) {
 
