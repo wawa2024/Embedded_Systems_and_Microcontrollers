@@ -3,6 +3,7 @@
 #include "src/timer/timer.h"
 #include "src/system/system.h"
 
+#include "ioBuffer.h"
 #include "alarmHandler.h"
 #include "alarmStates.h"
 #include "userPassword.h"
@@ -41,15 +42,16 @@ void loop(void) {
     disableAlarm();
   }
 
-  for (uint8_t i ; i = procMenu() ; ) {
+  for (uint8_t i = procMenu() ; true ; i = procMenu() ) {
     // ^Main menu program loop
 
     switch(i) {
 
-    case 1: armAlarm(); break;
-    case 2: disarmAlarm(); break;
-    case 3: changePassword(); break;
-    case 4: storePassword(); break;
+    case 0: armAlarm(); break;
+    case 1: disarmAlarm(); break;
+    case 2: changePassword(); break;
+    case 3: storePassword(); break;
+    case 4: return; break;
 
     default: break;
 

@@ -11,11 +11,11 @@
 enum scrollDirection { scrollUp = 0, scrollDown = 1 };
 enum screenItem { screenTop = 0, screenBottom = 1 };
 
-char* items[] = { "Exit"
-  , "arm alarm"
-  , "disarm alarm"
-  , "changePassword"
-  , "storePassword"
+char* items[] = { "Arm alarm"
+  , "Disarm alarm"
+  , "Change Password"
+  , "Store Password"
+  , "Exit"
 };
 
 const uint8_t amount_items = sizeof(items) / sizeof(char*);
@@ -78,7 +78,7 @@ uint8_t procMenu(void) {
   delay(100); // initial debounce delay
 
   while ( true ) {
-    if (poll_alarm_state()) return; ; // need to poll the alarm while in infinite loop
+    if (poll_alarm_state()) return 4; ; // need to poll the alarm while in infinite loop
 
     char c = getKey();
 
