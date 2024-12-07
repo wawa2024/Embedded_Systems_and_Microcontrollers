@@ -16,23 +16,27 @@ void init_alarm() {
 
 void armAlarm() {
   armed_state = 1;
-  lcdSuccess("Alarm armed");
   Serial.write("Alarm armed\n");
+  lcdSuccess("Alarm armed");
 }
 
 void disarmAlarm() {
   armed_state = 0;
   alarm_state = false;
   alarm_activated = false;
-  lcdSuccess("Alarm disarmed");
+  buzzer_state = false;
+  digitalWrite(buzzer_pin, buzzer_state);
   Serial.write("Alarm disarmed\n");
+  lcdSuccess("Alarm disarmed");
 }
 
 void disableAlarm() {
   alarm_state = false;
   alarm_activated = false;
-  lcdSuccess("Alarm disabled");
+  buzzer_state = false;
+  digitalWrite(buzzer_pin, buzzer_state);
   Serial.write("Alarm dis abled successfully\n");
+  lcdSuccess("Alarm disabled");
 }
 
 void register_alarm() {
@@ -50,7 +54,7 @@ void trigger_alarm() {
   Serial.write("Intrusion alert!\n");
 }
 
-void poll_alarm_state() {
+bool poll_alarm_state() {
   if (login_state == true) {
     alarm_state = false;
     Serial.write("Alarm disabled\n");
@@ -93,5 +97,9 @@ void poll_alarm_state() {
       alarm_time = millis();
       trigger_alarm();
     }
+
+    return true;
   }
+
+  return false;
 }

@@ -12,4 +12,4 @@ void register_alarm();
 
 void trigger_alarm();
 
-void poll_alarm_state();
+bool poll_alarm_state();

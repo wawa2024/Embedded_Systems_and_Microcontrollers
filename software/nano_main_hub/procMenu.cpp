@@ -78,7 +78,7 @@ uint8_t procMenu(void) {
   delay(100); // initial debounce delay
 
   while ( true ) {
-    poll_alarm_state(); // need to poll the alarm while in infinite loop
+    if (poll_alarm_state()) return; ; // need to poll the alarm while in infinite loop
 
     char c = getKey();
 
