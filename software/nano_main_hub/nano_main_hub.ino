@@ -23,7 +23,8 @@ void setup() {
   // system_init(/*void (*timer1_callback) (void)*/ PUT_FUNC1_HERE, /*void (*timer2_callback) (void)*/ PUT_FUNC2_HERE); // Init system 
 
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
-//  init_alarm(); // solo nano test setting
+  lcd.init(); // init lcd
+  init_alarm(); // solo nano test setting
   // initPassword(); // init password
 
 }
