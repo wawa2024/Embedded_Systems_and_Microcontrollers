@@ -6,6 +6,7 @@
 #include "src/I2C_LCD/I2C_LCD.h"
 #include "src/keyGuard/keyGuard.h"
 #include "guiMessage.h"
+#include "alarmStates.h"
 
 #define MSG_TIMEOUT 3000
 #define SCREEN_OFFSET 11
@@ -37,6 +38,7 @@ void storePassword(void) {
     delay(100); // initial debounce delay
 
     for ( bool boolScan = true ; boolScan ; ) {
+      if (alarm_state) return;
 
       char c = getKey();
 

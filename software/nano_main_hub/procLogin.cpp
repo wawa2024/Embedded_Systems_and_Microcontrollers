@@ -43,7 +43,6 @@ bool procLogin(void) {
   delay(100); // initial debounce delay
   
   while ( true ) {
-    poll_alarm_state(); // need to poll the alarm while in infinite loop
 
     char c = getKey();
     uint32_t cur_time = millis();

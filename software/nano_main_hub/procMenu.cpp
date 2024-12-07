@@ -4,7 +4,7 @@
 #include "src/matrixKeyboard/matrixKeyboard.h"
 #include "src/Debug/Debug.h"
 #include "src/keyGuard/keyGuard.h"
-#include "alarmHandler.h"
+#include "alarmStates.h"
 
 #define BG_COLOR WHITE
 
@@ -78,7 +78,7 @@ uint8_t procMenu(void) {
   delay(100); // initial debounce delay
 
   while ( true ) {
-    if (poll_alarm_state()) return 4; ; // need to poll the alarm while in infinite loop
+    if (alarm_state) return 4; ; // need to poll the alarm while in infinite loop
 
     char c = getKey();
 

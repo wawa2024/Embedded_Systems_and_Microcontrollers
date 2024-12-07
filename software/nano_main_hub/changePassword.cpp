@@ -9,6 +9,7 @@
 #include "src/Debug/Debug.h"
 #include "guiMessage.h"
 #include "storePassword.h"
+#include "alarmStates.h"
 
 #define PASSWORD_LENGTH 8
 #define SCREEN_OFFSET 4
@@ -36,6 +37,8 @@ void changePassword(void) {
   delay(100); // initial debounce delay
 
   while ( true ) {
+
+    if (alarm_state) return;
 
     char c = getKey();
 
