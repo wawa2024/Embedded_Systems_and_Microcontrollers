@@ -1,6 +1,6 @@
 #pragma once
 
-bool init_alarm();
+void init_alarm();
 
 void armAlarm();
 
