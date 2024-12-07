@@ -8,8 +8,8 @@
 
 #define BG_COLOR WHITE
 
-enum scrollDirection { scrollUp, scrollDown, };
-enum screenItem { screenTop, screenBottom };
+enum scrollDirection { scrollUp = 0, scrollDown = 1 };
+enum screenItem { screenTop = 0, screenBottom = 1 };
 
 char* items[] = { "Exit"
   , "changePassword"
@@ -18,17 +18,17 @@ char* items[] = { "Exit"
 
 const uint8_t amount_items = sizeof(items) / sizeof(char*);
 
-void tailMenu(int8_t i) {
+void tailMenu(int8_t i ,uint8_t screenRow) {
   // ^Draw tail item
   if ( 0 <= i and i < amount_items ) {
-    lcd.setCursor(0,screenTop);
+    lcd.setCursor(0,screenRow);
     lcd.print(" "); lcd.print(items[i]);
   }
 }
 
-void headMenu(int8_t i) {
+void headMenu(int8_t i ,uint8_t screenRow) {
   // ^Draw head item
-  lcd.setCursor(0,screenBottom);
+  lcd.setCursor(0,screenRow);
   lcd.print(">"); lcd.print(items[i]);
 }
 
@@ -40,13 +40,13 @@ void drawMenu(scrollDirection scrollVal, int8_t i) {
   switch(scrollVal) {
 
   case scrollUp:
-    headMenu(i);
-    tailMenu(i+1);
+    headMenu(i,screenTop);
+    tailMenu(i+1,screenBottom);
     break;
 
   case scrollDown:
-    tailMenu(i-1);
-    headMenu(i);
+    tailMenu(i-1,screenTop);
+    headMenu(i,screenBottom);
     break;
 
   default: break;
@@ -60,6 +60,7 @@ uint8_t procMenu(void) {
 
   lcd.setColor(BG_COLOR);
   lcd.noCursor();
+  lcd.stopBlink();
   lcd.clear();
 
   uint8_t i = 0;
