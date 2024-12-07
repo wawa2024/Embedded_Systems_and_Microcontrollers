@@ -96,6 +96,8 @@ bool procLogin(void) {
 
         if ( tryPassword(str) ) {
 
+          resetBuf(); // Reset string ioBuffer
+
           lcdSuccess("Login accepted");
 
           return true;
@@ -104,9 +106,9 @@ bool procLogin(void) {
 
           if ( attempts == MAX_TRIALS ) {
 
-            lcdFail("Login rejected");
-
             resetBuf(); // Reset string ioBuffer
+
+            lcdFail("Login rejected");
 
             return false;
 

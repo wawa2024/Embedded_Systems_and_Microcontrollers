@@ -31,7 +31,7 @@ void setup() {
 
 void loop(void) {
   poll_alarm_state(); // solo nano test setting, comment rest of loop out
-  
+
   if( not procLogin() ) // Exit if failed login
     return;
 
