@@ -12,3 +12,5 @@ uint8_t alarm_countdown = 5;
 
 const uint8_t interrupt_pin = 2;
 const uint8_t buzzer_pin = 8;
+
+bool inside_menu = false;
