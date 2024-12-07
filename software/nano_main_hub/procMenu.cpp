@@ -12,10 +12,10 @@ enum scrollDirection { scrollUp = 0, scrollDown = 1 };
 enum screenItem { screenTop = 0, screenBottom = 1 };
 
 char* items[] = { "Exit"
-  , "changePassword"
-  , "storePassword"
   , "arm alarm"
   , "disarm alarm"
+  , "changePassword"
+  , "storePassword"
 };
 
 const uint8_t amount_items = sizeof(items) / sizeof(char*);

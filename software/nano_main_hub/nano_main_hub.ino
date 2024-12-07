@@ -42,10 +42,10 @@ void loop(void) {
 
     switch(i) {
 
-    case 1: changePassword(); break;
-    case 2: storePassword(); break;
-    case 3: armAlarm(); break;
-    case 4: disarmAlarm(); break;
+    case 1: armAlarm(); break;
+    case 2: disarmAlarm(); break;
+    case 3: changePassword(); break;
+    case 4: storePassword(); break;
 
     default: break;
 
