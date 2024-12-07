@@ -3,6 +3,7 @@
 #include "src/timer/timer.h"
 #include "src/system/system.h"
 
+#include "ioBuffer.h"
 #include "alarmHandler.h"
 #include "userPassword.h"
 
@@ -51,6 +52,8 @@ void loop(void) {
     default: break;
 
     }
+
+    resetBuf();
 
   }
 
