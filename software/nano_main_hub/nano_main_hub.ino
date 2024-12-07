@@ -27,10 +27,10 @@ void setup() {
   timer1_setCallback( ( void(*) (void) ) poll_alarm_state);
 
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
+  Serial.write("\n"); // start Serial com esp32
   lcd.init(); // init lcd
   init_alarm(); // solo nano test setting
-  // initPassword(); // init password
-  Serial.write("\n");
+  initPassword(); // init password
 
 }
 
