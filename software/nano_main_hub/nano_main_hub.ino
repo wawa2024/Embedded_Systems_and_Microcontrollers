@@ -23,6 +23,8 @@ void setup() {
 
   // v Maybe not put too many abstraction onto init process? 
   // system_init(/*void (*timer1_callback) (void)*/ PUT_FUNC1_HERE, /*void (*timer2_callback) (void)*/ PUT_FUNC2_HERE); // Init system 
+  timer1_init();
+  timer1_setCallback( ( void(*) (void) ) poll_alarm_state);
 
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
   lcd.init(); // init lcd
@@ -33,7 +35,6 @@ void setup() {
 }
 
 void loop(void) {
-  poll_alarm_state(); // poll alarm state
 
   if( not procLogin() ) // Exit if failed login
     return;

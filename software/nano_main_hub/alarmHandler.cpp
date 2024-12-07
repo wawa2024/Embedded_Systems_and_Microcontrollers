@@ -42,6 +42,7 @@ void disableAlarm() {
 void register_alarm() {
   if (alarm_state == false) {
     alarm_time = millis();
+    buzzer_time = 0;
   }
 
   if (armed_state == 1 && alarm_state == false) {
