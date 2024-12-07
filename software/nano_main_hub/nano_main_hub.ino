@@ -5,6 +5,7 @@
 
 #include "ioBuffer.h"
 #include "alarmHandler.h"
+#include "alarmStates.h"
 #include "userPassword.h"
 
 #include "procSerial.h"
@@ -52,8 +53,10 @@ void loop(void) {
     default: break;
 
     }
-
+    
     resetBuf(); // clean ioBuffer with zeroes
+
+    if ( alarm_state ) return; // if alarm, logout from device
 
   }
 
