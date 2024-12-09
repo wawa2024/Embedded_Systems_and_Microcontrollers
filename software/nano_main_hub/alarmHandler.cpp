@@ -7,9 +7,9 @@
 #include "guiMessage.h"
 #include "src/eeprom/eeprom.h"
 
-#define INPUT(REG,PIN) REG &= ~(1 << PIN)
+#define PIN_INPUT(REG,PIN) REG &= ~(1 << PIN)
 // ^Set pin as input
-#define OUTPUT(REG,PIN) REG |= (1 << PIN)
+#define PIN_OUTPUT(REG,PIN) REG |= (1 << PIN)
 // ^Set pin as output
 
 const uint8_t interrupt_pin = 2;
@@ -37,11 +37,11 @@ void init_alarm() {
   eeprom_read(armed_state_eeprom);
   armed_state = armed_state_eeprom.data;
 
-  INPUT(DDRD,DDD2);
+  PIN_INPUT(DDRD,DDD2);
   // ^pinMode(interrupt_pin, INPUT);
 
-  OUTPUT(DDRB,DDB0);
-  // ^pinMode(buzzer_pin, OUTPUT);
+  PIN_OUTPUT(DDRB,DDB0);
+  // pinMode(buzzer_pin, OUTPUT);
 
   attachInterrupt(digitalPinToInterrupt(interrupt_pin), register_alarm, RISING);
 }
