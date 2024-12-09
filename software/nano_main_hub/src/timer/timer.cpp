@@ -60,7 +60,6 @@ void timer1_setCallback( void (*userCallback)(void) )
 
 ISR( TIMER2_OVF_vect )
 {
-    SREG |= (1 << 7);
     if(timer2_Callback != NULL)
     { 
         // Call users callback
