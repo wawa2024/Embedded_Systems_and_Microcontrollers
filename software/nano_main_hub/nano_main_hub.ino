@@ -26,7 +26,7 @@ void setup() {
   timer1_init();
   timer1_setCallback( ( void (*) (void) ) poll_alarm_state );
 
-  timer2_init()
+  timer2_init();
   timer2_setCallback( ( void (*) (void) ) readKeypad );
 
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
