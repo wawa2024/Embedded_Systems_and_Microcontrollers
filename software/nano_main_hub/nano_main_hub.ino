@@ -27,11 +27,11 @@ void setup() {
   timer1_init();
   timer1_setCallback( ( void (*) (void) ) poll_alarm_state );
 
-  //timer2_init();
-  //timer2_setCallback( ( void (*) (void) ) readKeypad );
+  timer2_init();
+  timer2_setCallback( ( void (*) (void) ) readKeypad );
 
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
-  Serial.write("\n"); // start Serial com esp32
+  Serial.write("\nSystem Booted\n"); // start Serial com esp32
   lcd.init(); // init lcd
   init_alarm(); // solo nano test setting
   initPassword(); // init password

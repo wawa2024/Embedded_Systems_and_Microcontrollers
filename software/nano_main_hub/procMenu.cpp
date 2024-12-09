@@ -67,9 +67,10 @@ uint8_t procMenu(void) {
   lcd.stopBlink();
   lcd.clear();
 
-  uint8_t i = 0;
+  static uint8_t i = 0;
+  static scrollDirection scrollHistory = scrollUp;
 
-  drawMenu(scrollUp,i);
+  drawMenu(scrollHistory,i);
 
   bool repeat = false;
   bool debounce = true;
@@ -95,14 +96,16 @@ uint8_t procMenu(void) {
       switch ( c ) {
 
       case 'A': // scroll up
+        scrollHistory = scrollUp;
         if ( i ) i--;
-        drawMenu(scrollUp,i);
+        drawMenu(scrollHistory,i);
         break;
 
       case 'B': // scroll down
         if ( i < amount_items ) i++;
         if ( i == amount_items ) i--;
-        drawMenu(scrollDown,i);
+        scrollHistory = scrollDown;
+        drawMenu(scrollHistory,i);
         break;
 
       case '#': // enter
