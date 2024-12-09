@@ -91,6 +91,7 @@ void storePassword(void) {
           case '1':
 
             savePassword();
+            Serial.write("Password stored\n");
             lcdSuccess("Password stored");
             return;
 

@@ -85,6 +85,7 @@ void changePassword(void) {
 
         setPassword(str);
 
+        Serial.write("Password changed\n");
         lcdSuccess("Password changed");
 
         storePassword();

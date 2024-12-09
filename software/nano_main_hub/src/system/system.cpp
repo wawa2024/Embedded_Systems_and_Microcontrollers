@@ -32,7 +32,7 @@ void system_reboot(void)
 {
     // Save values to eeprom
     system_saveChanges();
-    
+
     // Initialize wdt so it can
     // perform the reset
     wdt_init();
