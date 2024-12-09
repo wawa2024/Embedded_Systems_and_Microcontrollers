@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <string>
 
 const char* ssid = "main_hub";
 const char* password = "12345678";
@@ -25,7 +26,7 @@ void setup() {
   Serial.println(server_IP);
   
   server.on("/", handle_root);
-  server.on("/alarm", handle_alarm);
+  server.on("/alarm", HTTP_POST, handle_alarm);
   server.begin();
   Serial.println("HTTP server started");
 }
@@ -49,7 +50,12 @@ void handle_root() {
 }
 
 void handle_alarm() {
-  Serial.println("Alarm received");
+  String body = "";
+  if(server.hasArg("plain")) {
+    body = server.arg("plain");
+  }
+  Serial.print("Alarm received from ");
+  Serial.println(body);
   digitalWrite(output, HIGH);
   digitalWrite(LED_BUILTIN, LOW);
   server.send(200, "text/plain", "Alarm received");
