@@ -12,6 +12,7 @@
 #include "procSerial.h"
 #include "procLogin.h"
 #include "procMenu.h"
+#include "procReboot.h"
 
 #include "changePassword.h"
 #include "storePassword.h"
@@ -26,8 +27,8 @@ void setup() {
   timer1_init();
   timer1_setCallback( ( void (*) (void) ) poll_alarm_state );
 
-  timer2_init();
-  timer2_setCallback( ( void (*) (void) ) readKeypad );
+  //timer2_init();
+  //timer2_setCallback( ( void (*) (void) ) readKeypad );
 
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
   Serial.write("\n"); // start Serial com esp32
@@ -60,7 +61,7 @@ void loop(void) {
     case 1: disarmAlarm(); break;
     case 2: changePassword(); break;
     case 3: storePassword(); break;
-    case 4: system_reboot(); break;
+    case 4: procReboot(); break;
     case 5: return; break;
 
     default: break;

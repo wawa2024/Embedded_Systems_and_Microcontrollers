@@ -32,6 +32,7 @@ bool procLogin(void) {
 
   char* str = pointBuf();
   bool error = false;
+  bool alarm_screen = false;
 
   uint32_t prev_time = millis();
 
@@ -50,13 +51,33 @@ bool procLogin(void) {
     char c = getKey();
     uint32_t cur_time = millis();
 
-    // remove error red screen
-    if ( error and ( cur_time > ( prev_time + 500 ) ) )
-    {
-      lcd.setColor(BG_COLOR);
-      error = false;
+    // error red feedback
+    if ( error )
+      lcd.setColor(RED);
+
+    // timelapse feedback
+    if ( cur_time > prev_time + 500 ) {
+
+      if ( alarm_state ) {
+
+        if ( alarm_screen )
+          lcd.setColor(RED);
+        else
+          lcd.setColor(BG_COLOR);
+
+        alarm_screen = not alarm_screen;
+
+      } else {
+        
+        lcd.setColor(BG_COLOR);
+
+        error = false;
+
+      }
+
+      prev_time = cur_time;
     }
-    
+
     if ( c != ' ' ) {
 
       tmp_c = prev_c;
@@ -100,6 +121,9 @@ bool procLogin(void) {
 
         if ( tryPassword(str) ) {
 
+          if ( not alarm_state )
+            Serial.write("Password accepted\n");
+
           lcdSuccess("Login accepted");
 
           resetBuf(); // clean ioBuffer with zeroes
@@ -110,6 +134,7 @@ bool procLogin(void) {
 
           if ( attempts == MAX_TRIALS ) {
 
+            Serial.write("Password rejected\n");
             lcdFail("Login rejected");
 
             resetBuf(); // clean ioBuffer with zeroes
@@ -118,7 +143,6 @@ bool procLogin(void) {
 
           }
 
-          lcd.setColor(RED);
           prev_time = cur_time;
           error = true;
           attempts++;
