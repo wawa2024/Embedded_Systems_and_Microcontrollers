@@ -20,9 +20,8 @@
 #include "src/Debug/Debug.h"
 
 void setup() {
+  // ^Arduino nano init
 
-  // v Maybe not put too many abstraction onto init process? 
-  // system_init(/*void (*timer1_callback) (void)*/ PUT_FUNC1_HERE, /*void (*timer2_callback) (void)*/ PUT_FUNC2_HERE); // Init system 
   timer1_init();
   timer1_setCallback( ( void(*) (void) ) poll_alarm_state);
 
@@ -30,11 +29,12 @@ void setup() {
   Serial.write("\n"); // start Serial com esp32
   lcd.init(); // init lcd
   init_alarm(); // solo nano test setting
-  // initPassword(); // init password
+  initPassword(); // init password
 
 }
 
 void loop(void) {
+  // ^Arduino nano main loop
 
   inside_menu = false;
   
@@ -56,7 +56,8 @@ void loop(void) {
     case 1: disarmAlarm(); break;
     case 2: changePassword(); break;
     case 3: storePassword(); break;
-    case 4: return; break;
+    case 4: system_reboot(); break;
+    case 5: return; break;
 
     default: break;
 
