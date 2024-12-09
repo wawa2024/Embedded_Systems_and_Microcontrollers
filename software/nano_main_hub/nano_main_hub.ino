@@ -2,6 +2,7 @@
 #include "src/I2C_LCD/I2C_LCD.h"
 #include "src/timer/timer.h"
 #include "src/system/system.h"
+#include "src/matrixKeyboard/matrixKeyboard.h"
 
 #include "ioBuffer.h"
 #include "alarmHandler.h"
@@ -23,7 +24,10 @@ void setup() {
   // ^Arduino nano init
 
   timer1_init();
-  timer1_setCallback( ( void(*) (void) ) poll_alarm_state);
+  timer1_setCallback( ( void (*) (void) ) poll_alarm_state );
+
+  timer2_init()
+  timer2_setCallback( ( void (*) (void) ) readKeypad );
 
   Serial.begin(BAUD_RATE,SERIAL_8N1); // init Serial
   Serial.write("\n"); // start Serial com esp32
