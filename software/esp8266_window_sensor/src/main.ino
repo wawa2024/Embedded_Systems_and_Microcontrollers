@@ -8,6 +8,7 @@
 
 Adafruit_MPU6050 imu;
 
+const char* sensor_type = "window";
 const char* ssid = "main_hub";
 const char* password = "12345678";
 uint32_t lastMillis = 0;
@@ -32,6 +33,9 @@ const int max_history = 10;
 AccelData accelHistory[max_history];
 GyroData gyroHistory[max_history];
 int currentIndex = 0;
+
+AccelData averageAccel = {0, 0, 0};
+GyroData averageGyro = {0, 0, 0};
 
 AccelData previousStableAccel = {0, 0, 0};
 GyroData previousStableGyro = {0, 0, 0};
@@ -79,6 +83,11 @@ void loop() {
   accelHistory[currentIndex] = {a.acceleration.x, a.acceleration.y, a.acceleration.z};
   gyroHistory[currentIndex] = {g.gyro.x, g.gyro.y, g.gyro.z};
 
+  averageAccel = {0, 0, 0};
+  averageGyro = {0, 0, 0};
+  
+  set_averages();
+
   previousMagnetValue = magnetValue;
   magnetValue = digitalRead(magnetPin);
   
@@ -87,10 +96,92 @@ void loop() {
     currentIndex = 0;
     initialized = true;
   }
-  
-  AccelData averageAccel = {0, 0, 0};
-  GyroData averageGyro = {0, 0, 0};
 
+  if (millis() - lastMillis >= 500) {
+    log_values();
+    lastMillis = millis();
+  }
+
+  if (initialized == true) {
+    if (std::abs(a.acceleration.x - averageAccel.x) > 10) {
+      register_alarm(1);
+    }
+
+    if (std::abs(a.acceleration.y - averageAccel.y) > 10) {
+      register_alarm(2);
+    }
+
+    if (std::abs(a.acceleration.z - averageAccel.z) > 10) {
+      register_alarm(3);
+    }
+
+    if (std::abs(g.gyro.x - averageGyro.x) > 0.5) {
+      register_alarm(4);
+    }
+
+    if (std::abs(g.gyro.y - averageGyro.y) > 0.5) {
+      register_alarm(5);
+    }
+
+    if (std::abs(g.gyro.z - averageGyro.z) > 0.5) {
+      register_alarm(6);
+    }
+
+    if (magnetValue != previousMagnetValue) {
+      register_alarm(7);
+    }
+  }
+
+  if (alarm == true && (millis() - alarmMillis) % 100 == 0) {
+    send_alarm();
+
+    if (millis() - alarmMillis >= 2000) {
+      Serial.print("Alarm timeout ");
+      Serial.println(identifier);
+      alarm = false;
+      digitalWrite(LED_BUILTIN, HIGH);
+    }
+  }
+}
+
+void register_alarm(uint8_t identifier) {
+  alarm = true;
+  previousStableAccel = averageAccel;
+  previousStableGyro = averageGyro;
+  identifier = identifier;
+  alarmMillis = millis();
+
+  send_alarm();
+}
+
+void send_alarm() {
+  if (WiFi.status() == WL_CONNECTED) {
+    digitalWrite(LED_BUILTIN, LOW);
+
+    HTTPClient http;
+    WiFiClient client;
+    
+    http.begin(client, "http://192.168.4.1/alarm");
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    int httpCode = http.POST(sensor_type);
+
+    Serial.print("Alarm ");
+    
+    if (httpCode > 0) {
+      String response = http.getString();
+      Serial.println("Received: " + response);
+    } else {
+      Serial.println("Error on HTTP request");
+    }
+    
+    http.end();
+
+    Serial.println(identifier);
+  }
+}
+
+void set_averages() {
   for (int i = 0; i < max_history; i++) {
     averageAccel.x += accelHistory[i].x;
     averageAccel.y += accelHistory[i].y;
@@ -100,144 +191,33 @@ void loop() {
     averageGyro.z += gyroHistory[i].z;
   }
 
-    averageAccel.x /= max_history;
-    averageAccel.y /= max_history;
-    averageAccel.z /= max_history;
-    averageGyro.x /= max_history;
-    averageGyro.y /= max_history;
-    averageGyro.z /= max_history;
-
-
-  if ((millis() - lastMillis) % 500 == 0) {
-    Serial.print("Acceleration X: ");
-    Serial.print(averageAccel.x);
-    Serial.print(", Y: ");
-    Serial.print(averageAccel.y);
-    Serial.print(", Z: ");
-    Serial.print(averageAccel.z);
-    Serial.println(" m/s^2");
-
-    Serial.print("Rotation X: ");
-    Serial.print(averageGyro.x);
-    Serial.print(", Y: ");
-    Serial.print(averageGyro.y);
-    Serial.print(", Z: ");
-    Serial.print(averageGyro.z);
-    Serial.println(" rad/s");
-
-    Serial.print("Magnet state: ");
-    Serial.println(magnetValue);
-
-    Serial.println("");
-  }
-
-  if (initialized == true) {
-    if (std::abs(a.acceleration.x - averageAccel.x) > 10) {
-      alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
-      identifier = 1;
-      alarmMillis = millis();
-    }
-
-    if (std::abs(a.acceleration.y - averageAccel.y) > 10) {
-      alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;   
-      identifier = 2; 
-      alarmMillis = millis();
-    }
-
-    if (std::abs(a.acceleration.z - averageAccel.z) > 10) {
-      alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
-      identifier = 3;
-      alarmMillis = millis();
-    }
-
-    if (std::abs(g.gyro.x - averageGyro.x) > 0.5) {
-      alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
-      identifier = 4;
-      alarmMillis = millis();
-    }
-
-    if (std::abs(g.gyro.y - averageGyro.y) > 0.5) {
-      alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
-      identifier = 5;
-      alarmMillis = millis();
-    }
-
-    if (std::abs(g.gyro.z - averageGyro.z) > 0.5) {
-      alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
-      identifier = 6;
-      alarmMillis = millis();
-    }
-
-    if (magnetValue != previousMagnetValue) {
-      alarm = true;
-      identifier = 7;
-      alarmMillis = millis();
-    }
-
-  }
-
-  if (alarm == true && (millis() - alarmMillis) % 100 == 0) {
-    Serial.print("Alarm ");
-    send_alarm();
-    Serial.println(identifier);
-    digitalWrite(LED_BUILTIN, LOW);
-    if (millis() - alarmMillis >= 2000) {
-      Serial.print("Alarm timeout ");
-      Serial.println(identifier);
-      alarm = false;
-      digitalWrite(LED_BUILTIN, HIGH);
-    }
-  }
-/*
-  if (millis() - lastMillis >= 5000 && 
-        WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    WiFiClient client;
-    
-    http.begin(client, "http://192.168.4.1/alarm");
-    int httpCode = http.GET();
-    
-    if (httpCode > 0) {
-      String payload = http.getString();
-      Serial.println("Received: " + payload);
-    } else {
-      Serial.println("Error on HTTP request");
-    }
-    
-    http.end();
-
-    lastMillis = millis();
-  }
-*/
+  averageAccel.x /= max_history;
+  averageAccel.y /= max_history;
+  averageAccel.z /= max_history;
+  averageGyro.x /= max_history;
+  averageGyro.y /= max_history;
+  averageGyro.z /= max_history;
 }
 
-void send_alarm() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    WiFiClient client;
-    
-    http.begin(client, "http://192.168.4.1/alarm");
-    int httpCode = http.GET();
-    
-    if (httpCode > 0) {
-      String payload = http.getString();
-      Serial.println("Received: " + payload);
-    } else {
-      Serial.println("Error on HTTP request");
-    }
-    
-    http.end();
-  }
+void log_values() {
+  Serial.print("Acceleration X: ");
+  Serial.print(averageAccel.x);
+  Serial.print(", Y: ");
+  Serial.print(averageAccel.y);
+  Serial.print(", Z: ");
+  Serial.print(averageAccel.z);
+  Serial.println(" m/s^2");
+
+  Serial.print("Rotation X: ");
+  Serial.print(averageGyro.x);
+  Serial.print(", Y: ");
+  Serial.print(averageGyro.y);
+  Serial.print(", Z: ");
+  Serial.print(averageGyro.z);
+  Serial.println(" rad/s");
+
+  Serial.print("Magnet state: ");
+  Serial.println(magnetValue);
+
+  Serial.println("");
 }

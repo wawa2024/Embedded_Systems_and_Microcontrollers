@@ -6,7 +6,7 @@
 #include "procLogin.h"
 #include "guiMessage.h"
 
-uint16_t buzzer_time = 0;
+uint32_t buzzer_time = 0;
 
 void init_alarm() {
   pinMode(interrupt_pin, INPUT);
@@ -56,65 +56,50 @@ void trigger_alarm() {
 }
 
 bool poll_alarm_state() {
-  if (login_state == true) {
-    alarm_state = false;
-    Serial.write("Alarm disabled\n");
+  if (alarm_state == false) {}
+    return false;
   }
 
-  if (alarm_state == true) {
-    if (alarm_activated == false) {
-      if (buzzer_state == true && millis() - alarm_time >= buzzer_time) {
-        digitalWrite(buzzer_pin, buzzer_state);
-        buzzer_time += 200;
-        buzzer_state = !buzzer_state;
-      }
-
-      if (buzzer_state == false && millis() - alarm_time >= buzzer_time) {
-        digitalWrite(buzzer_pin, buzzer_state);
-        buzzer_time += 800;
-        buzzer_state = !buzzer_state;
-      }
-        
-/* // speech countdown
-      if (millis() - alarm_time >= alarm_delay - alarm_countdown * 1000) {
-        char buffer[3];
-        sprintf(buffer, "%d\n", alarm_countdown);
-        Serial.write(buffer);
-        alarm_countdown--;
-
-      }
-*/
-
-      if (millis() - alarm_time >= alarm_delay) {
-        alarm_time = millis();
-        trigger_alarm();
-        alarm_activated = true;
-        buzzer_state = false;
-        buzzer_time = 0;
-      }
+  if (alarm_activated == false) {
+    if (buzzer_state == true && millis() - alarm_time >= buzzer_time) {
+      digitalWrite(buzzer_pin, buzzer_state);
+      buzzer_time += 200;
+      buzzer_state = !buzzer_state;
     }
 
-    if (alarm_activated == true) {
-      if (millis() - alarm_time >= alert_cadence) {
-        alarm_time = millis();
-        trigger_alarm();
-      }
-      
-      if (buzzer_state == true && millis() - alarm_time >= buzzer_time) {
-        digitalWrite(buzzer_pin, buzzer_state);
-        buzzer_time += 100;
-        buzzer_state = !buzzer_state;
-      }
-
-      if (buzzer_state == false && millis() - alarm_time >= buzzer_time) {
-        digitalWrite(buzzer_pin, buzzer_state);
-        buzzer_time += 400;
-        buzzer_state = !buzzer_state;
-      }
+    if (buzzer_state == false && millis() - alarm_time >= buzzer_time) {
+      digitalWrite(buzzer_pin, buzzer_state);
+      buzzer_time += 800;
+      buzzer_state = !buzzer_state;
     }
 
-    return true;
+    if (millis() - alarm_time >= alarm_delay) {
+      alarm_time = millis();
+      trigger_alarm();
+      alarm_activated = true;
+      buzzer_state = false;
+      buzzer_time = 0;
+    }
   }
 
-  return false;
+  if (alarm_activated == true) {
+    if (millis() - alarm_time >= alert_cadence) {
+      alarm_time = millis();
+      trigger_alarm();
+    }
+    
+    if (buzzer_state == true && millis() - alarm_time >= buzzer_time) {
+      digitalWrite(buzzer_pin, buzzer_state);
+      buzzer_time += 100;
+      buzzer_state = !buzzer_state;
+    }
+
+    if (buzzer_state == false && millis() - alarm_time >= buzzer_time) {
+      digitalWrite(buzzer_pin, buzzer_state);
+      buzzer_time += 400;
+      buzzer_state = !buzzer_state;
+    }
+  }
+
+  return true;
 }
