@@ -5,6 +5,7 @@
 #include "src/Debug/Debug.h"
 #include "src/keyGuard/keyGuard.h"
 #include "alarmStates.h"
+#include "src/system/system.h"
 
 #define BG_COLOR WHITE
 
@@ -15,6 +16,7 @@ char* items[] = { "Arm alarm"
   , "Disarm alarm"
   , "Change Password"
   , "Store Password"
+  , "Reboot"
   , "Exit"
 };
 
