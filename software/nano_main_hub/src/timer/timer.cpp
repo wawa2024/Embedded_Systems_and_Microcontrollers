@@ -4,8 +4,8 @@
 
 
 // counter preload for timer1 (1kHz). Theoretical value is 250, 
-// but with experimentation the value 246 was deamed more appropriate
-static const uint16_t timer1_preload = 0xFFFF - 246; 
+// but with experimentation the value 248 was deamed more appropriate
+static const uint16_t timer1_preload = 0xFFFF - 248; 
 // counter preload for timer2 (1kHz). Theoretical value is 125, 
 // but with experimentation the value 123 was deamed more appropriate
 static const uint8_t timer2_preload = 0xFF - 123; 
@@ -20,11 +20,11 @@ void (*timer2_Callback)(void);
 
 ISR( TIMER1_OVF_vect )
 {
-    // If callback is not set then leave
-    if(timer1_Callback == NULL){ return; }
-    
-    // Call users callback
-    timer1_Callback();
+    if(timer1_Callback != NULL)
+    { 
+        // Call users callback
+        timer1_Callback();
+    }
 
     // Preloaded for 1kHz overflow
     TCNT1 = timer1_preload; 
@@ -60,11 +60,11 @@ void timer1_setCallback( void (*userCallback)(void) )
 
 ISR( TIMER2_OVF_vect )
 {
-    // If callback is not set then leave
-    if(timer2_Callback == NULL){ return; }
-    
-    // Call users callback
-    timer2_Callback();
+    if(timer2_Callback != NULL)
+    { 
+        // Call users callback
+        timer2_Callback();
+    }
 
     // Preloaded for 1kHz overflow
     TCNT2 = timer2_preload; 
@@ -77,7 +77,7 @@ void timer2_init(void)
     TCCR2A = 0x00;
 
     // 128 prescaler
-    TCCR2B = 0x04;
+    TCCR2B = 0x05;
 
     // Overflow interrupt enabled
     TIMSK2 |= ( 1 << TOIE2 );
