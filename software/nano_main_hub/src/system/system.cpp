@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "system.h"
 
 #include "../watchdog/watchdog.h"
@@ -9,7 +10,7 @@ static char initialPassword[PASSWORD_SIZE];
 
 void initialPassword_init( char *password )
 {   
-    if(password == NULL){ return; }
+    if( password == 0 ){ return; }
 
     for(uint8_t i = 0; i < PASSWORD_SIZE; i++)
     {
