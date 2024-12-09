@@ -33,11 +33,6 @@ static uint8_t keyHistory[historyLength];
 static uint8_t pressedKey = ' ';
 
 
-uint8_t getPressedKey()
-{
-    return pressedKey;
-}
-
 int8_t readLines(void)
 {
     uint16_t temp = 0;
@@ -168,6 +163,5 @@ void readKeypad(void)
 uint8_t getKey(void)
 // ^Simplified getKey abstraction
 {
-  readKeypad();
   return pressedKey;
 }
