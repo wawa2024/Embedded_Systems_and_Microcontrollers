@@ -1,0 +1,41 @@
+digraph "setup"
+{
+  bgcolor="transparent";
+  edge [fontname="Unifont",fontsize="12",labelfontname="Unifont",labelfontsize="12"];
+  node [fontname="Unifont",fontsize="12",shape=record];
+  rankdir=LR;
+  Node1 [label="setup",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node2 [label="init_alarm",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node2 -> Node3 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node3 [label="eeprom_read",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node2 -> Node4 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node4 [label="register_alarm",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node4 -> Node5 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node5 [label="eeprom_write",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node6 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node6 [label="initPassword",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node6 -> Node7 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node7 [label="eeprom2buffer",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node7 -> Node3 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node1 -> Node8 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node8 [label="poll_alarm_state",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node8 -> Node9 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node9 [label="trigger_alarm",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node10 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node10 [label="readKeypad",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node10 -> Node11 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node11 [label="getCharacter",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node11 -> Node12 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node12 [label="readLines",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node10 -> Node13 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node13 [label="uniformHistory",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node14 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node14 [label="timer1_init",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node15 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node15 [label="timer1_setCallback",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node16 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node16 [label="timer2_init",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node17 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node17 [label="timer2_setCallback",height=0.2,width=0.4,color="black",tooltip=" "];
+}
