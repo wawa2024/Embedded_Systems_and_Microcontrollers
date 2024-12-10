@@ -131,16 +131,16 @@ bool poll_alarm_state() {
     
     if (buzzer_state == true and millis() - alarm_time >= buzzer_time) {
       //digitalWrite(buzzer_pin, buzzer_state);
-      if( buzzer_state ){ PORTD |= (1 << PIND0); }
-      else{ PORTD &= ~(1 << PIND0); }
+      if( buzzer_state ){ PORTB |= (1 << PINB0); }
+      else{ PORTB &= ~(1 << PINB0); }
       buzzer_time += 100;
       buzzer_state = not buzzer_state;
     }
 
     if (buzzer_state == false and millis() - alarm_time >= buzzer_time) {
       //digitalWrite(buzzer_pin, buzzer_state);
-      if( buzzer_state ){ PORTD |= (1 << PIND0); }
-      else{ PORTD &= ~(1 << PIND0); }
+      if( buzzer_state ){ PORTB |= (1 << PINB0); }
+      else{ PORTB &= ~(1 << PINB0); }
       buzzer_time += 400;
       buzzer_state = not buzzer_state;
     }
