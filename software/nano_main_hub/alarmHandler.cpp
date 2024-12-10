@@ -15,9 +15,6 @@
 const uint8_t interrupt_pin = 2;
 const uint8_t buzzer_pin = 8;
 
-uint32_t last_tone_change = 0;
-bool tone_increasing = true;
-uint16_t tone_frequency = 1000;
 uint32_t buzzer_time = 0;
 
 const uint8_t alarm_state_address = 11;
@@ -78,7 +75,7 @@ void disableAlarm() {
 
 void register_alarm() {
   if (alarm_state == false) {
-    alarm_start_time = millis();
+    alarm_time = millis();
     buzzer_time = 0;
   }
 
@@ -95,27 +92,26 @@ void trigger_alarm() {
 }
 
 bool poll_alarm_state() {
-  uint32_t current_millis = millis();
 
   if (alarm_state == false) {
     return false;
   }
 
   if (alarm_activated == false) {
-    if (buzzer_state == true and current_millis - alarm_start_time >= buzzer_time) {
+    if (buzzer_state == true and millis() - alarm_time >= buzzer_time) {
       digitalWrite(buzzer_pin, buzzer_state);
       buzzer_time += 200;
       buzzer_state = not buzzer_state;
     }
 
-    if (buzzer_state == false and current_millis - alarm_start_time >= buzzer_time) {
+    if (buzzer_state == false and millis() - alarm_time >= buzzer_time) {
       digitalWrite(buzzer_pin, buzzer_state);
       buzzer_time += 800;
       buzzer_state = not buzzer_state;
     }
 
-    if (current_millis - alarm_start_time >= alarm_delay) {
-      alarm_start_time = current_millis;
+    if (millis() - alarm_time >= alarm_delay) {
+      alarm_time = millis();
       trigger_alarm();
       alarm_activated = true;
       buzzer_state = false;
@@ -124,22 +120,21 @@ bool poll_alarm_state() {
   }
 
   if (alarm_activated == true) {
-    if (current_millis - alarm_start_time >= alert_cadence) {
-      alarm_start_time = current_millis;
+    if (millis() - alarm_time >= alert_cadence) {
+      alarm_time = millis();
       trigger_alarm();
     }
-    if (current_millis - last_tone_change >= 2) {
-      buzzer_state = true;
-      last_tone_change = current_millis;
-      if (tone_increasing) {
-        tone_frequency += 10;
-        if (tone_frequency >= 2000) tone_increasing = false;
-      } else {
-        tone_frequency -= 10;
-        if (tone_frequency <= 1000) tone_increasing = true;
-      }
+    
+    if (buzzer_state == true and millis() - alarm_time >= buzzer_time) {
+      digitalWrite(buzzer_pin, buzzer_state);
+      buzzer_time += 100;
+      buzzer_state = not buzzer_state;
+    }
 
-      tone(buzzer_pin, tone_frequency);
+    if (buzzer_state == false and millis() - alarm_time >= buzzer_time) {
+      digitalWrite(buzzer_pin, buzzer_state);
+      buzzer_time += 400;
+      buzzer_state = not buzzer_state;
     }
   }
 
