@@ -1,0 +1,46 @@
+digraph "nano_main_hub.ino"
+{
+  rankdir=LR;
+  bgcolor="transparent";
+  edge [fontname="Unifont",fontsize="12",labelfontname="Unifont",labelfontsize="12"];
+  node [fontname="Unifont",fontsize="12",shape=record];
+  Node1 [label="nano_main_hub.ino",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node2 [label="Arduino.h",height=0.2,width=0.4,color="grey75",tooltip=" "];
+  Node1 -> Node3 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node3 [label="src/I2C_LCD/I2C_LCD.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node3 -> Node4 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node4 [label="DFRobot_RGBLCD1602.h",height=0.2,width=0.4,color="grey75",tooltip=" "];
+  Node1 -> Node5 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node5 [label="src/timer/timer.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node6 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node6 [label="src/system/system.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node7 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node7 [label="src/matrixKeyboard\l/matrixKeyboard.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node7 -> Node8 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node8 [label="stdint.h",height=0.2,width=0.4,color="grey75",tooltip=" "];
+  Node1 -> Node9 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node9 [label="ioBuffer.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node9 -> Node8 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node1 -> Node10 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node10 [label="alarmHandler.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node11 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node11 [label="alarmStates.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node11 -> Node8 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node1 -> Node12 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node12 [label="userPassword.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node13 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node13 [label="procSerial.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node14 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node14 [label="procLogin.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node15 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node15 [label="procMenu.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node16 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node16 [label="procReboot.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node17 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node17 [label="changePassword.h",height=0.2,width=0.4,color="black"tooltip=" "];
+  Node1 -> Node18 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node18 [label="storePassword.h",height=0.2,width=0.4,color="black",tooltip=" "];
+  Node1 -> Node19 [color="midnightblue",fontsize="12",style="solid",fontname="Unifont"];
+  Node19 [label="src/Debug/Debug.h",height=0.2,width=0.4,color="black",tooltip=" "];
+}
