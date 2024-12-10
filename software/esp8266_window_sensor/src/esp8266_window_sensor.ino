@@ -33,9 +33,6 @@ AccelData accelHistory[max_history];
 GyroData gyroHistory[max_history];
 int currentIndex = 0;
 
-AccelData previousStableAccel = {0, 0, 0};
-GyroData previousStableGyro = {0, 0, 0};
-
 void send_alarm();
 
 void setup() {
@@ -125,64 +122,54 @@ void loop() {
     Serial.println("");
   }
 
+  uint32_t currentMillis = millis();
+
   if (initialized == true) {
     if (std::abs(a.acceleration.x - averageAccel.x) > 1) {
       alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
       identifier = 1;
-      alarmMillis = millis();
+      alarmMillis = currentMillis;
     }
 
     if (std::abs(a.acceleration.y - averageAccel.y) > 1) {
-      alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;   
+      alarm = true; 
       identifier = 2; 
-      alarmMillis = millis();
+      alarmMillis = currentMillis;
     }
 
     if (std::abs(a.acceleration.z - averageAccel.z) > 1) {
       alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
       identifier = 3;
-      alarmMillis = millis();
+      alarmMillis = currentMillis;
     }
 
     if (std::abs(g.gyro.x - averageGyro.x) > 0.1) {
       alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
       identifier = 4;
-      alarmMillis = millis();
+      alarmMillis = currentMillis;
     }
 
     if (std::abs(g.gyro.y - averageGyro.y) > 0.1) {
       alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
       identifier = 5;
-      alarmMillis = millis();
+      alarmMillis = currentMillis;
     }
 
     if (std::abs(g.gyro.z - averageGyro.z) > 0.1) {
       alarm = true;
-      previousStableAccel = averageAccel;
-      previousStableGyro = averageGyro;
       identifier = 6;
-      alarmMillis = millis();
+      alarmMillis = currentMillis;
     }
 
     if (magnetValue != previousMagnetValue) {
       alarm = true;
       identifier = 7;
-      alarmMillis = millis();
+      alarmMillis = currentMillis;
     }
 
   }
 
-  if (alarm == true && (millis() - alarmMillis) % 100 == 0) {
+  if (alarm == true && (currentMillis - alarmMillis) % 100 == 0) {
     Serial.print("Alarm ");
     send_alarm();
     Serial.println(identifier);
@@ -194,27 +181,6 @@ void loop() {
       digitalWrite(LED_BUILTIN, HIGH);
     }
   }
-/*
-  if (millis() - lastMillis >= 5000 && 
-        WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    WiFiClient client;
-    
-    http.begin(client, "http://192.168.4.1/alarm");
-    int httpCode = http.GET();
-    
-    if (httpCode > 0) {
-      String payload = http.getString();
-      Serial.println("Received: " + payload);
-    } else {
-      Serial.println("Error on HTTP request");
-    }
-    
-    http.end();
-
-    lastMillis = millis();
-  }
-*/
 }
 
 void send_alarm() {
