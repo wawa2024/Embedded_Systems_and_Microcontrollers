@@ -103,27 +103,27 @@ void loop() {
   }
 
   if (initialized == true) {
-    if (std::abs(a.acceleration.x - averageAccel.x) > 10) {
+    if (std::abs(a.acceleration.x - averageAccel.x) > 1) {
       register_alarm(1);
     }
 
-    if (std::abs(a.acceleration.y - averageAccel.y) > 10) {
+    if (std::abs(a.acceleration.y - averageAccel.y) > 1) {
       register_alarm(2);
     }
 
-    if (std::abs(a.acceleration.z - averageAccel.z) > 10) {
+    if (std::abs(a.acceleration.z - averageAccel.z) > 1) {
       register_alarm(3);
     }
 
-    if (std::abs(g.gyro.x - averageGyro.x) > 0.5) {
+    if (std::abs(g.gyro.x - averageGyro.x) > 0.1) {
       register_alarm(4);
     }
 
-    if (std::abs(g.gyro.y - averageGyro.y) > 0.5) {
+    if (std::abs(g.gyro.y - averageGyro.y) > 0.1) {
       register_alarm(5);
     }
 
-    if (std::abs(g.gyro.z - averageGyro.z) > 0.5) {
+    if (std::abs(g.gyro.z - averageGyro.z) > 0.1) {
       register_alarm(6);
     }
 
