@@ -2,9 +2,14 @@
 
 This project uses Arduino, ESP32 and ESP8266 to monitor doors or windows for break-ins. It has a text-to-speech engine, wireless alarm sensors and a main hub with a keypad and an LCD screen.
 
+https://github.com/user-attachments/assets/1c19024b-0c93-4eca-83f1-ba00edd10f07
+
 ## Hardware ([link](/hardware/))
 
 Contains Kicad files of the circuits (.kicad_sch), symbols (.dcm, .lib) and footprints (.mod). 
+
+![image of the circuit](/media/circuit.png)
+![image of the device](/media/device.jpg)
 
 ## Software ([link](/software/))
 
@@ -23,3 +28,4 @@ Made using a D1 Mini. Uses an IMU and a magnet sensor to detect door or window o
 ### Wifi server ([link](/software/esp8266_server/))
 
 D1 Mini runs a wifi server and relays any alarms received via wifi to Arduino Nano by wire.
+
