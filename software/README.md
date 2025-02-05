@@ -4,7 +4,7 @@ Each directory in this folder represent a programmable device.
 `nano_main_hub` is the main control unit. All other devices are used as peripheral devices to the main hub.
 
 ![Image of nano_main_hub](../media/nano_main_hub.jpg)
-![Image of esp8266_window_sensor](../media/esp8266_window_sensor)
+![Image of esp8266_window_sensor](../media/esp8266_window_sensor.jpg)
 
 `nano_main_hub` uses the following features of the `atmega328p` microcontroller for its control logic.
 
